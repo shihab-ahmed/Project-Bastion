@@ -10,4 +10,5 @@ void drawFoot();
 void DrawLagPad();
 void drawHeadBodyAttacher();
 void drawHandAndBodyAttacher();
+void DrawRightHand();
 #endif // !HERO_HEADER

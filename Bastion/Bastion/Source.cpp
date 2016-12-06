@@ -68,11 +68,23 @@ void drawScene()
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
 	
+	glBegin(GL_LINES);
+	glVertex3f(-7,0,0);
+	glVertex3f(7, 0, 0);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(0, -4, 0);
+	glVertex3f(0, 4, 0);
+	glEnd();
+
 	glPushMatrix();
 	glRotatef(_angle,0,1,0);
 	//glRotatef(90, 0, 1, 0);
 	getHero();
 	glPopMatrix();
+
+
 	glutSwapBuffers();
 }
 
@@ -98,14 +110,8 @@ void update(int value)
 	glutPostRedisplay(); //Tell GLUT that the display has changed
 
 						 //Tell GLUT to call update again in 25 milliseconds
-	glutTimerFunc(25, update, 0);
+	glutTimerFunc(35, update, 0);
 }
-
-
-
-
-
-
 
 
 int main(int argc, char** argv)

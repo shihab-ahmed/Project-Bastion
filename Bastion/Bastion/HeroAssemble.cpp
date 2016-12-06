@@ -1,11 +1,39 @@
+#include <iostream>
 #include <GL/glut.h>
 #include "Hero.h"
+#include "Utility.h"
+using namespace std;
+float LeftHandRotation = 0.0;
+bool isLeftHandMaxReach = false;
+void UpdateRotation()
+{
+	if (isLeftHandMaxReach)
+	{
+		LeftHandRotation -= 2.0f;
+		if (LeftHandRotation < -30)
+		{
+			isLeftHandMaxReach = false;
+		}
+	}
+	else
+	{
+		LeftHandRotation += 2.0f;
+		if (LeftHandRotation > 30)
+		{
+			isLeftHandMaxReach = true;
+		}
+	}
+
+}
 void getHero()
 {
-	glPushMatrix();//head push
+	UpdateRotation();
+
+
+	/*glPushMatrix();//head push
 	glTranslatef(0,1.1,-.8);
 	glScalef(.6, .6, .6);
-	drawHeroHead();
+	//drawHeroHead();
 	glPopMatrix();//head pop
 
 	glPushMatrix();//head body attacher push
@@ -25,22 +53,26 @@ void getHero()
 
 	glPushMatrix();//Right Shoulder push
 	glEnable(GL_LIGHTING);
-	glTranslatef(0, 1.2, -1);
+	glTranslatef(.5, 1.2, -1);
+	glScalef(1.2, 1.2, 1.2);
 	DrawRightShoulder();
 	glDisable(GL_LIGHTING);
 	glPopMatrix();//Right Shoulder pop
 
 	glPushMatrix();//Left Shoulder push
 	glEnable(GL_LIGHTING);
-	glTranslatef(0, 1.2, -1);
+	glTranslatef(-.5, 1.2, -1);
+	glScalef(1.2, 1.2, 1.2);
 	DrawLeftShoulder();
 	glDisable(GL_LIGHTING);
 	glPopMatrix();//Left Shoulder pop
 
 
+
 	glPushMatrix();//Left hand and body attacher push
 	glEnable(GL_LIGHTING);
 	glTranslatef(1.5, .3, -1);
+	glRotatef(LeftHandRotation, 1, 0, 0);
 	glScalef(.15,.15,.15);
 	drawHandAndBodyAttacher();
 	glDisable(GL_LIGHTING);
@@ -48,10 +80,34 @@ void getHero()
 
 	glPushMatrix();//Left hand and body attacher push
 	glEnable(GL_LIGHTING);
-	glTranslatef(1.5, -1.5, -1);
+	glTranslatef(1.5, 0, -1);
+	glRotatef(LeftHandRotation, 1, 0, 0);
 	glScalef(.5, .5, .5);
 	drawHeroLeftHand();
 	glDisable(GL_LIGHTING);
 	glPopMatrix();//Left hand and body attacher push
-	
+
+
+
+
+	glPushMatrix();//Right hand and body attacher push
+	glEnable(GL_LIGHTING);
+	glTranslatef(-1.5, .3, -1);
+	glRotatef(180,0,1,0);
+	glRotatef(-LeftHandRotation, 1, 0, 0);
+	glScalef(.15, .15, .15);
+	drawHandAndBodyAttacher();
+	glDisable(GL_LIGHTING);
+	glPopMatrix();//Right hand and body attacher push
+
+	glPushMatrix();//Right hand and body attacher push
+	glEnable(GL_LIGHTING);
+	glTranslatef(-1.5, 0, -1);
+	glRotatef(-LeftHandRotation, 1, 0, 0);
+	glScalef(.5, .5, .5);
+	DrawRightHand();
+	glDisable(GL_LIGHTING);
+	glPopMatrix();//Right hand and body attacher push
+	*/
+	DrawLaser();
 }
