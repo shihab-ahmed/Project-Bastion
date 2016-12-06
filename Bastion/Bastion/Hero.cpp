@@ -1,8 +1,17 @@
 #include <GL/glut.h>
+#include "Lighting.h"
 
 
+void drawHeadBodyAttacher()
+{
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
 
-
+	glPushMatrix();
+	glRotatef(90,1,0,0);
+	gluCylinder(quadratic, .3, .3, 1, 20, 20);
+	glPopMatrix();
+}
 void DrawLeftShoulder()
 {
 
@@ -209,7 +218,11 @@ void drawHeroHead()
 
 
 	//Head outward start
-	glColor3f(.8, .8, .7);
+	glPushMatrix();//Light matrix push
+	glEnable(GL_LIGHTING);
+	SetDiffuse(1,.9,.8);
+	SetAmbeint(1, .9, .8);
+
 	/*............*/
 	glPushMatrix();
 	glScalef(1, 1, 2);
@@ -230,11 +243,16 @@ void drawHeroHead()
 	glPopMatrix();
 	/*............*/
 	//Head outward end
+	glDisable(GL_LIGHTING);
+	glPopMatrix(); //light matrix pop
 
 
 
+	glPushMatrix();//Light matrix push
+	glEnable(GL_LIGHTING);
+	SetDiffuse(.3, .3, .3);
+	SetAmbeint(.3, .3, .3);
 	//Head inner start
-	glColor3f(.3, .3, .3);
 	/*...........................*/
 	glPushMatrix();
 	glTranslatef(0, .1, .25);
@@ -261,12 +279,17 @@ void drawHeroHead()
 	glPopMatrix();
 	/*...........................*/
 	//Head inner end
+	glDisable(GL_LIGHTING);
+	glPopMatrix(); //light matrix pop
 
 
-
-
+	glPushMatrix();
+	glEnable(GL_LIGHTING); //Light enable
+	SetLightPosition(0, 0, 2);
+	SetDiffuse(0, 1, 1);
+	SetAmbeint(0, 1, 1);
+	//SetEmision(0, .7, .7);
 	//Head core start
-	glColor3f(0, 1, 1);
 	/*............*/
 	glPushMatrix();
 	glTranslatef(0, .1, .95);
@@ -275,7 +298,8 @@ void drawHeroHead()
 	/*............*/
 	glPopMatrix();
 	//Head core end
-
+	glDisable(GL_LIGHTING);//Light dissable
+	glPopMatrix();
 
 	/*........................................................................................*/
 
@@ -284,10 +308,13 @@ void drawHeroHead()
 
 void drawChest()
 {
+	glPushMatrix();//Chest final push
+
+	glPushMatrix();//Front body final push mat
+	glTranslatef(0,0,.5);
+
 	glPushMatrix();
 	glScalef(4, 3, 3);
-	//glTranslatef(0,-.7,.5);
-
 	//Chest Upper Part Start
 	glPushMatrix();
 	glScalef(.80, 1, 1);
@@ -384,6 +411,7 @@ void drawChest()
 	glPopMatrix();
 	glPopMatrix();
 
+
 	//Side Triangle
 	glPushMatrix();
 	glTranslatef(.5, .0459, -.4);
@@ -473,14 +501,451 @@ void drawChest()
 	glutSolidCube(1);
 	glPopMatrix();
 	//Front core end
+	glPopMatrix();//Front body final pop mat
 
 
+	//Shoulder clip 1 start
+	glColor3ub(243, 231, 183);
+	glPushMatrix();
+	glTranslatef(-1.3,1.1,-1.7);
+	glScalef(.6,.2,2);
+	glutSolidCube(1);
+	glPopMatrix();
+	//Shoulder clip 1 end
+
+	//Shoulder Clip 2 start
+	glColor3ub(243, 231, 183);
+	glPushMatrix();
+	glTranslatef(1.3, 1.1, -1.7);
+	glScalef(.6, .2, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+	//SHoulder clip 2 end
+
+	//Shoulder clip 3 part start
+	glColor3ub(243, 231, 183);
+	glPushMatrix();
+	glTranslatef(1.3, -.2, -1.7);
+	glScalef(.5, 2.4, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+	//Shoulder clip 3 part end
+
+	//Shoulder clip 4 part start
+	glColor3ub(243, 231, 183);
+	glPushMatrix();
+	glTranslatef(-1.3, -.2, -1.7);
+	glScalef(.5, 2.4, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+	//Shoulder clip 4 part end
+
+	//Shoulder clip 5 part start
+	glColor3ub(243, 231, 183);
+	glPushMatrix();
+	glTranslatef(0, -.2, -2.6);
+	glScalef(2.2, 2.4, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+	//Shoulder clip 5 part start
+
+	glPopMatrix();//chest final pop
 }
 
 void drawHeroLeftHand()
 {
-	glutWireCube(1);
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+
+	glPushMatrix();//Hero left hand final push
+	glRotatef(90,1,0,0);
+	glRotatef(-90, 0, 1, 0);
+
+	glPushMatrix(); //final push for wrist
+	glTranslatef(1, .25, 0);
+	glRotatef(10, 0, 0, 1);
+
+	glPushMatrix();
+	glScalef(1.2,1.2,.8);
+
+	glColor3ub(100, 200, 72);
+	glPushMatrix();
+	glTranslatef(-.6,0,0);		
+	glutSolidCube(1);
+	glPopMatrix();
+	
+	glColor3ub(100, 200, 72);
+	glPushMatrix();
+	glTranslatef(.6, 0, 0);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	
+
+
+	glColor3ub(150, 150, 150);
+	glPushMatrix();
+	glTranslatef(-.6,0,.5);
+	glScalef(.15, .15, .15);
+	glutSolidTorus(1,1,6,6);
+	glPopMatrix();
+
+
+	glColor3ub(150, 150, 150);
+	glPushMatrix();
+	glTranslatef(-.6, 0, -.5);
+	glScalef(.15, .15, .15);
+	glutSolidTorus(1, 1, 6, 6);
+	glPopMatrix();
+
+	glPopMatrix();
+
+
+
+	//cylinder
+	glColor3ub(100, 100, 100);
+	glPushMatrix();
+	glTranslatef(-1, 0, 0);
+	glRotatef(90, 0, 1, 0);
+	gluCylinder(quadratic, .3, .3, 3, 20, 20);
+	glPopMatrix();
+
+	//wracking ball
+	glColor3ub(100, 100, 100);
+	glPushMatrix();
+	glTranslatef(2.5,0,0);
+	glutSolidSphere(1,20,20);
+	glPopMatrix();
+
+	glPopMatrix();//final pop for wrist
+
+
+
+	//left hand up start
+
+	glPushMatrix(); //final push
+
+	glTranslatef(-1.5, 0, 0);
+	glScalef(1.5, 1.5, 1.5);
+	
+	//Middle part
+	glColor3ub(100, 100, 100);
+	glPushMatrix();
+	glScalef(1, 1, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.58, 0, 0);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.5, .22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.5, -.22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+	//middle part end
+
+
+	//side part 1
+	glColor3ub(50, 200, 50);
+	glPushMatrix();
+	glTranslatef(0, 0, -.29);
+	glScalef(1.1, 1.1, .5);
+
+
+	glPushMatrix();
+	glScalef(1, 1, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.58, 0, 0);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.5, .22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.5, -.22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPopMatrix();
+	//side part 1 end
+
+	//side part 2
+	glColor3ub(50, 200, 50);
+	glPushMatrix();
+	glTranslatef(0, 0, .29);
+	glScalef(1.1, 1.1, .5);
+
+
+	glPushMatrix();
+	glScalef(1, 1, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.58, 0, 0);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.5, .22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.5, -.22, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .4, .4);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPopMatrix();
+	//side part 2 end
+
+	//cylinder
+	glColor3ub(100, 100, 100);
+	glPushMatrix();
+	glTranslatef(-1.2, 0, 0);
+	glRotatef(90, 0, 1, 0);
+	gluCylinder(quadratic, .25, .25, 1, 20, 20);
+	glPopMatrix();
+
+
+	glPopMatrix();//final pop
+	//left hand up end
+
+	//up and down attach start
+	glPushMatrix();
+	glScalef(1.5,.8,.4);
+	glutSolidCube(1);
+	glPopMatrix();
+	//up and down attach start
+
+	glPopMatrix();//hero Left hand final pop
+
+
 }
 
+void drawFoot()
+{
+	//feet start
+	glPushMatrix();//final push
+	//left foot part left start
 
+	glPushMatrix();
+	glTranslatef(0, 0, .4);
+
+	glPushMatrix();
+	glScalef(1, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(.57, .12, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(.68, .29, 0);
+	glScalef(.2, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.50, .05, 0);
+	glRotatef(-45, 0, 0, 1);
+	glScalef(.2, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPopMatrix();
+	//left foot part left end
+
+	//foot part attach start
+	glPushMatrix();
+	glTranslatef(-.1, 0, 0);
+	glScalef(.5, .2, .6);
+	glutSolidCube(1);
+	glPopMatrix();
+	//foot part attach end
+
+	//left foot part right start
+
+	glPushMatrix();
+	glTranslatef(0, 0, -.4);
+
+	glPushMatrix();
+	glScalef(1, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(.57, .12, 0);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.4, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(.68, .29, 0);
+	glScalef(.2, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.50, .05, 0);
+	glRotatef(-45, 0, 0, 1);
+	glScalef(.2, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPopMatrix();
+	//left foot part right end
+	glPopMatrix();//final pop
+	//foot end
+}
+
+void DrawLagPad()
+{
+	
+	//Lag pad start
+	glPushMatrix();//final push 
+
+	glEnable(GL_LIGHTING);
+	SetDiffuse(.9, .7, .2);
+	SetAmbeint(.9, .7, .2);
+	SetSpecuilar(.2, .2, .2);
+	SetShininess(100);
+
+	//glutSolidSphere(.5,40,40);
+	//middle
+	glPushMatrix();
+	
+	glScalef(.1, 1, .8);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	//bottom
+	glPushMatrix();
+	glTranslatef(-.06,-.54,0);
+	glRotatef(-45,0,0,1);
+	glScalef(.1, .2, .8);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(-.055, .525, .3);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.1, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.055, .525, -.3);
+	glRotatef(45, 0, 0, 1);
+	glScalef(.1, .2, .2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.15,-.02, .35);
+	glScalef(.2, 1.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.15, -.02, -.35);
+	glScalef(.2, 1.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.15, -.02, .35);
+	glScalef(.2, 0.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.16, .58, .35);
+	glScalef(.18, 0.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.17, -.59, .35);
+	glScalef(.16, 0.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.16, .58, -.35);
+	glScalef(.18, 0.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.17, -.59, -.35);
+	glScalef(.16, 0.1, .1);
+	glutSolidCube(1);
+	glPopMatrix();
+	glDisable(GL_LIGHTING);
+	glPopMatrix();//final pop
+	//Lag pad end
+}
+void drawHandAndBodyAttacher()
+{
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+
+	glPushMatrix();//hand body attacher final push
+	glRotatef(90, 0, 1, 0);
+	glPushMatrix();
+	glTranslatef(0,0,-5);
+	glScalef(1,1,8);
+	gluCylinder(quadratic, 1.2, 1.2, 1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glScalef(1, 1, 3);
+	glutSolidTorus(.5, 2, 3, 8);
+	glPopMatrix();
+	glPopMatrix(); //head body attacher final pop
+}
 

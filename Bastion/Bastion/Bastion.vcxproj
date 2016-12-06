@@ -20,10 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="HeroAssemble.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="HeroAssemble.h" />
+    <ClInclude Include="Lighting.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3DD95D5C-98EE-464E-AFA3-320FA959AED2}</ProjectGuid>

@@ -4,4 +4,10 @@
 void drawHeroHead();
 void drawHeroLeftHand();
 void drawChest();
+void DrawRightShoulder();
+void DrawLeftShoulder();
+void drawFoot();
+void DrawLagPad();
+void drawHeadBodyAttacher();
+void drawHandAndBodyAttacher();
 #endif // !HERO_HEADER
