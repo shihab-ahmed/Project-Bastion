@@ -4,6 +4,9 @@
 #include <GL/glut.h>
 #include "HeroAssemble.h"
 #include "Lighting.h"
+#include "Controller.h"
+#include "Environment.h"
+#include "Tank.h"
 #define PI 3.14159265
 using namespace std;
 
@@ -20,23 +23,18 @@ void init(void)
 	GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat position[] = { 0.0, 3, 3, 1.0 };
+	GLfloat position[] = { 0.0, 0, 0, 0 };
 	GLfloat lmodel_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
 	GLfloat local_view[] = { 0.0 };
 
-	glClearColor(.05, 0.05, 0.05, 0.0);
-
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-	glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, local_view);
+	glLightfv(GL_LIGHT1, GL_POSITION, position);
 
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+
+	glClearColor(.15, 0.45, 0.85, 0.0);
 }
 
 //Initializes 3D rendering
@@ -44,8 +42,6 @@ void initRendering()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
-	//glEnable(GL_CULL_FACE);//wont draw back camera faces speed up process
-	//glCullFace(GL_BACK);
 }
 
 //Called when the window is resized
@@ -55,43 +51,68 @@ void handleResize(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.0, (double)w / (double)h, 1.0, 200.0);
-}
+	
+}	
 
 
 void drawScene()
 {
+	
+
+	cout << getEyeX()<<endl;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);		//Switch to the drawing perspective
 	glLoadIdentity();				//Reset the drawing perspective
 									//glRotatef(-_cameraAngle, 0.0, 1.0, 0.0); //Rotate the camera
 	glTranslatef(0.0, 0.0, -10.0);	//Move forward 5 units
+
+	gluLookAt(0, 2.5, -5+getZPosition(), 0,2, 5+getZPosition(), 0, 1, 0);
+	/*gluLookAt(0, 0, 1,
+		0, 0, 0,
+		0.0f, 1.0f, 90.0f);*/
+
+	/*glPushMatrix();
+	glRotatef(_angle,1,0,0);
+	SetDiffuse(1,0,0);
+
+	glBegin(GL_QUADS);
+	glVertex3f(-1,-1,0);
+	glVertex3f(1, -1, 0);
+	glVertex3f(1, 1, 0);
+	glVertex3f(-1, 1, 0);
+	glEnd();
+	glPopMatrix();*/
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
+
 	
 	glBegin(GL_LINES);
-	glVertex3f(-7,0,0);
-	glVertex3f(7, 0, 0);
+	glVertex3f(-100,0,0);
+	glVertex3f(100, 0, 0);
 	glEnd();
 
 	glBegin(GL_LINES);
-	glVertex3f(0, -4, 0);
-	glVertex3f(0, 4, 0);
+	glVertex3f(0, -100, 0);
+	glVertex3f(0, 100, 0);
 	glEnd();
 
 	glPushMatrix();
-	glRotatef(_angle,0,1,0);
-	//glRotatef(90, 0, 1, 0);
+	//glRotatef(_angle,0,1,0);
+	//glRotatef(90, 1, 0, 0);
 	getHero();
+	Environment();
+	/*TankBody();
+	TankFrontTire();
+	TankRearTire();
+	TankFireSystem();
+	TankBodyFireJoin();*/
+	//glutWireOctahedron();
 	glPopMatrix();
 
 
 	glutSwapBuffers();
 }
-
-
-
-
-
 
 
 void update(int value)
@@ -127,8 +148,18 @@ int main(int argc, char** argv)
 	init();
 	//Set handler functions
 	glutDisplayFunc(drawScene);
-
 	glutReshapeFunc(handleResize);
+
+
+	//adding here the mouse processing callbacks
+	glutMouseFunc(processMouse);
+	//glutMotionFunc(mouseMove);
+	glutPassiveMotionFunc(mouseMove);
+	//glutEntryFunc(processMouseEntry);
+	glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyboardUp);
+
+
 	glutTimerFunc(25, update, 0);
 	glutMainLoop();
 	return 0;

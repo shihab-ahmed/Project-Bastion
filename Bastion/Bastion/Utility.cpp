@@ -9,7 +9,7 @@ void DrawLaser()
 	glPushMatrix();//laser begin
 	glEnable(GL_LIGHTING);
 	SetDiffuse(.7,0,0);
-	SetAmbeint(.3, 0, 0);
+	SetAmbient(.3, 0, 0);
 	SetSpecuilar(.5,.5,.5);
 	SetShininess(80);
 	SetEmision(.2,0,0);
