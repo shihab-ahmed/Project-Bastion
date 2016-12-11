@@ -1,5 +1,7 @@
 #include <iostream>
 #include <GL/glut.h>
+#include "Algorithm.h"
+#include "PositionData.h"
 using namespace std;
 float deltaAngle = 0.0f;
 int xOrigin = -1;
@@ -14,7 +16,8 @@ int EyeX = 0, EyeY = 0, EyeZ = 0, UpX = 0, UpY, UpZ;
 int Face;
 bool FaceLeft, FaceRight, FaceForward=true, FaceBackward,isRotateRight,isRotateLeft;
 float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
-
+float HeroPosX=0, HeroPosY=0, HeroPosZ=0;
+Matrix HeroPositionMatrix(4,Row(1));
 
 void processMouse(int button, int state, int x, int y) 
 {
@@ -24,7 +27,7 @@ void processMouse(int button, int state, int x, int y)
 		// when the button is released
 		if (state == GLUT_UP)
 		{
-			cout << "Left"<<endl;
+			
 		}
 		else 
 		{
@@ -36,7 +39,7 @@ void processMouse(int button, int state, int x, int y)
 		// when the button is released
 		if (state == GLUT_UP)
 		{
-			cout << "RIGHT"<<endl;
+			
 		}
 		else 
 		{// state = GLUT_DOWN
@@ -54,25 +57,33 @@ int getEyeY()
 }
 void mouseMove(int x, int y) 
 {
-	EyeX = x/10;
-	EyeY = y/10;
-	
+
 }
 bool StateWalking()
 {
 	return isWalk;
 }
-float getXPosition()
+
+float getCameraZPosition()
 {
-	return xpos;
+	if (FaceForward & isWalk)
+	{
+		return 0.2f;
+	}
+	if (FaceBackward & isWalk)
+	{
+
+		return -0.2f;
+	}
+	else
+	{
+		return 0;
+	}
 }
-float getZPosition()
-{
-	return zpos;
-}
+
 int getRotation()
 {
-	//glRotatef(angle, 0, 1, 0);
+	
 	if (isRotateRight)
 	{
 		angle -= 2.0f;
@@ -83,37 +94,59 @@ int getRotation()
 	}
 	return angle;
 }
+float getCameraRotation()
+{
+	return angle;
+}
 void getDirection()
 {
-	if (isRotateLeft || isRotateRight)
+	HeroPositionMatrix = GetHeroPosition();
+	HeroPositionMatrix = Translation(HeroPositionMatrix,xpos,ypos,zpos);
+	SetHeroPosition(HeroPositionMatrix);
+	
+	
+	glTranslatef(xpos, ypos, zpos);
+	glRotatef(getRotation(), 0, 1, 0);
+	
+	//if (isRotateLeft || isRotateRight)
+	//{
+	//glRotatef(getRotation(), 0, 1, 0);
+	//glTranslatef(xpos, ypos, zpos);
+	//}
+	//else if(isWalk)
+	//{
+	//	//glTranslatef(xpos, ypos, zpos);
+	//	//glRotatef(getRotation(), 0, 1, 0);
+	//}
+	//
+	//else
+	//{
+	//	glTranslatef(xpos, ypos, zpos);
+	//	glRotatef(getRotation(), 0, 1, 0);
+	//}
+	/*if (isRotateLeft || isRotateRight)
 	{
 		glRotatef(getRotation(), 0, 1, 0);
-		glTranslatef(xpos, ypos, zpos);
+		glTranslatef(xpos, ypos, zpos);	
 	}
-	if (isWalk)
-	{
-		glTranslatef(xpos, ypos, zpos);
-		glRotatef(getRotation(), 0, 1, 0);		
-	}
-	//glRotatef(getRotation(), 0, 1, 0);
-
+*/
 
 	if (FaceForward & isWalk)
 	{
-		zpos += 0.1f;
+		zpos += 0.2f;
 	}
 	if (FaceBackward & isWalk)
 	{
 
-		zpos -= 0.1f;
+		zpos -= 0.2f;
 	}
 	if (FaceRight & isWalk)
 	{
-		xpos -= 0.1f;
+		xpos -= 0.2f;
 	}
 	if (FaceLeft & isWalk)
 	{
-		xpos += 0.1f;
+		xpos += 0.2f;
 	}
 }
 

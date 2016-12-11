@@ -9,6 +9,6 @@ int getEyeY();
 int getEyeX();
 bool StateWalking();
 void getDirection();
-float getXPosition();
-float getZPosition();
+float getCameraZPosition();
+float getCameraRotation();
 #endif // !CONTROLLER_HEADER

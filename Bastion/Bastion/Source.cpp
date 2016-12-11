@@ -7,6 +7,9 @@
 #include "Controller.h"
 #include "Environment.h"
 #include "Tank.h"
+#include "Algorithm.h"
+#include "PositionData.h"
+#include "Tank.h"
 #define PI 3.14159265
 using namespace std;
 
@@ -14,7 +17,7 @@ float _angle = 0.0;
 float _cameraAngle = 0.;
 float _ang_tri = 0.0;
 
-
+Matrix CameraPosition(4, Row(3));
 
 
 //Lighting
@@ -33,8 +36,24 @@ void init(void)
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-
 	glClearColor(.15, 0.45, 0.85, 0.0);
+
+
+	//camera setup
+	CameraPosition[0][0] = 0;
+	CameraPosition[1][0] = 0; //2.5
+	CameraPosition[2][0] = -5; //-5
+	CameraPosition[3][0] = 1;
+
+	CameraPosition[0][1] = 0;
+	CameraPosition[1][1] = 0; //2
+	CameraPosition[2][1] = 0; //5
+	CameraPosition[3][1] = 1;
+
+	CameraPosition[0][2] = 0;
+	CameraPosition[1][2] = 1; //1
+	CameraPosition[2][2] = 0;
+	CameraPosition[3][2] = 1;
 }
 
 //Initializes 3D rendering
@@ -58,31 +77,21 @@ void handleResize(int w, int h)
 void drawScene()
 {
 	
-
-	cout << getEyeX()<<endl;
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);		//Switch to the drawing perspective
 	glLoadIdentity();				//Reset the drawing perspective
 									//glRotatef(-_cameraAngle, 0.0, 1.0, 0.0); //Rotate the camera
 	glTranslatef(0.0, 0.0, -10.0);	//Move forward 5 units
 
-	gluLookAt(0, 2.5, -5+getZPosition(), 0,2, 5+getZPosition(), 0, 1, 0);
-	/*gluLookAt(0, 0, 1,
-		0, 0, 0,
-		0.0f, 1.0f, 90.0f);*/
+	
+	
 
-	/*glPushMatrix();
-	glRotatef(_angle,1,0,0);
-	SetDiffuse(1,0,0);
-
-	glBegin(GL_QUADS);
-	glVertex3f(-1,-1,0);
-	glVertex3f(1, -1, 0);
-	glVertex3f(1, 1, 0);
-	glVertex3f(-1, 1, 0);
-	glEnd();
-	glPopMatrix();*/
+	CameraPosition = Translation(CameraPosition,0,0, getCameraZPosition());
+	//CameraPosition = Rotation(CameraPosition, getCameraRotation(),2);
+	gluLookAt(CameraPosition[0][0], CameraPosition[1][0], CameraPosition[2][0],
+		CameraPosition[0][1], CameraPosition[1][1], CameraPosition[2][1],
+				0, 1, 0);
+	//gluLookAt(1,0,-1,0,0,0,0,1,0);
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
 
@@ -97,19 +106,25 @@ void drawScene()
 	glVertex3f(0, 100, 0);
 	glEnd();
 
+	
 	glPushMatrix();
-	//glRotatef(_angle,0,1,0);
-	//glRotatef(90, 1, 0, 0);
+	//glRotatef(_angle, 0, 1, 0);
 	getHero();
+	//glRotatef(getCameraRotation(), 0, 1, 0);
 	Environment();
-	/*TankBody();
-	TankFrontTire();
-	TankRearTire();
-	TankFireSystem();
-	TankBodyFireJoin();*/
-	//glutWireOctahedron();
 	glPopMatrix();
 
+	glPushMatrix();
+	glEnable(GL_LIGHTING);
+	glTranslatef(-4,-2,0);
+	glScalef(3.5,3.5,3.5);
+	TankBody();
+	TankBodyFireJoin();
+	TankFireSystem();
+	TankFrontTire();
+	TankRearTire();
+	glDisable(GL_LIGHTING);
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -117,12 +132,12 @@ void drawScene()
 
 void update(int value)
 {
-	_angle += 2.0f;
+	_angle += 1.0f;
 	if (_angle > 360)
 	{
 		_angle -= 360;
 	}
-	_ang_tri += 2.0f;
+	_ang_tri += 1.0f;
 	if (_ang_tri > 360)
 	{
 		_ang_tri -= 360;
@@ -137,7 +152,6 @@ void update(int value)
 
 int main(int argc, char** argv)
 {
-	cout << "Press s to start and s to off\n 1, 2 , 3,4,5 range of speed" << endl;
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(1000, 600);
@@ -146,6 +160,10 @@ int main(int argc, char** argv)
 	glutCreateWindow("Transformations");
 	initRendering();
 	init();
+	InitPositionData();
+	//CameraPosition = Rotation(CameraPosition, 45, 2);
+	ShowMatrix(CameraPosition);
+
 	//Set handler functions
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(handleResize);

@@ -36,6 +36,7 @@ void getHero()
 	glPushMatrix(); //Final push
 
 	getDirection();
+
 	glPushMatrix();//head push
 	glTranslatef(0,3.1,0);
 	glScalef(.6, .6, .6);
