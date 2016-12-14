@@ -8,6 +8,8 @@ public:
 	Player(float positionX, float positionZ, float initialRotation);
 	int BeltRotation();
 	void DrawHeroMiddleBody();
+	float playerLegRotation();
+	void WalkingState(bool isWalk);
 	void accelerate(bool directionIsForward);
 	float givePosX();
 	float givePosZ();
@@ -47,6 +49,8 @@ private:
 	float boostSpeed, boostPower;
 	int shieldStrength;
 	float shieldOpacity;
-	bool isWalking;
+	bool isWalking=false;
+	float legRotation = 0.0f;
+	bool legRotationMaxReached = false;
 };
 

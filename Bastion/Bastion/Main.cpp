@@ -48,7 +48,7 @@ void initRendering() {
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.07f);
+	glFogf(GL_FOG_DENSITY, 0.1f);
 
 	// enable the fog
 	glEnable(GL_FOG);
@@ -99,8 +99,8 @@ void update(int value)
 	screenShakeMagnitude *= 0.95;
 	zoomMagnitude *= 0.95;
 
-	cout << "VM:" << radarVisionActivated<<endl;
-	cout << "FogColor:" << fogColour[0] << endl;
+	//cout << "VM:" << radarVisionActivated<<endl;
+	//cout << "FogColor:" << fogColour[0] << endl;
 
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
@@ -199,11 +199,16 @@ void checkInput()
 	}
 	if (keyDown['w']) {
 		playerRobot->accelerate(true);
+		playerRobot->WalkingState(true);
 		cout << "w" << endl;
 	}
 	if (keyDown['s']) {
 		playerRobot->accelerate(false);
+		playerRobot->WalkingState(true);
 		cout << "s" << endl;
+	}
+	if (!keyDown['w']&& !keyDown['s']) {
+		playerRobot->WalkingState(false);
 	}
 	if (keyDown['a']) {
 		playerRobot->rotate(true);

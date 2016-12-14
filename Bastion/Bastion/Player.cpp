@@ -1619,13 +1619,71 @@ void DrawLeftLeg()
 	glPopMatrix();//left leg final pop
 
 }
+//void UpdateRotation()
+//{
+//	if (isLeftHandMaxReach)
+//	{
+//		LeftHandRotation -= 2.0f;
+//		if (LeftHandRotation < -20)
+//		{
+//			isLeftHandMaxReach = false;
+//		}
+//	}
+//	else
+//	{
+//		LeftHandRotation += 2.0f;
+//		if (LeftHandRotation > 20)
+//		{
+//			isLeftHandMaxReach = true;
+//		}
+//	}
+//
+//}
+float Player::playerLegRotation()
+{
+	
+	if (this->isWalking)
+	{
+		cout << "walkng" << endl;
+		if (this->legRotationMaxReached)
+		{
+			this->legRotation -= 1.0f;
+			if (this->legRotation <- 15)
+			{
+				this->legRotationMaxReached = false;
+			}
+		}
+		else
+		{
+			this->legRotation += 1.0f;
+			if (this->legRotation >15)
+			{
+				this->legRotationMaxReached = true;
+			}
+		}
+		
+	}
+	else
+	{
+		cout << "not walkng" << endl;
+		this->legRotation = 0;
+	}
+	return this->legRotation;
+}
+void Player::WalkingState(bool isWalk)
+{
+	this->isWalking = isWalk;
+
+}
 void Player::accelerate(bool directionIsForward)
 {
+	
 	if (directionIsForward) {
-		this->speed += 0.02;
+		this->speed += 0.01;
+		
 	}
 	else {
-		this->speed -= 0.02;
+		this->speed -= 0.01;
 	}
 }
 float Player::givePosX() {
@@ -1836,18 +1894,19 @@ void Player::DrawPlayer()
 	DrawHeroMiddleBody();
 	glPopMatrix();//Right hand and body attacher push
 
-
 	glPushMatrix();//Left Leg attacher push
 	glTranslatef(1, .2, -.2);
+	glRotatef(this->playerLegRotation(),1,0,0);
 	glScalef(.5, .5, .5);
 	DrawLeftLeg();
 	glPopMatrix();//Left Leg attacher pop
 
-	glPushMatrix();//Left Leg attacher push
+	glPushMatrix();//right Leg attacher push
 	glTranslatef(-1, .2, -.2);
+	glRotatef(-(this->playerLegRotation()), 1, 0, 0);
 	glScalef(.5, .5, .5);
 	DrawLeftLeg();
-	glPopMatrix();//Left Leg attacher pop
+	glPopMatrix();//right Leg attacher pop
 
 	glPopMatrix(); //hero Bottom pop
 
