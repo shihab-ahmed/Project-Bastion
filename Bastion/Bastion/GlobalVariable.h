@@ -26,6 +26,7 @@ float lagDistance = 0;
 float fogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 
+EnemyTank* enemyTank;
 PlazmaBall* plazmaBall;
 Player* playerRobot;
 Environment* environment;

@@ -5,5 +5,7 @@ public:
 	Environment();
 	void makeGrid(float size);
 	~Environment();
+	void BuildingA();
+	void DrawEnvironment();
 };
 

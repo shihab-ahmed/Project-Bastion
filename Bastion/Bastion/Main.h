@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Definition.h"
 #include "Environment.h"
+#include "EnemyTank.h"
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void handlePassiveMouse(int x, int y);

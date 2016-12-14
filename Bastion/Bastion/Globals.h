@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "PlazmaBall.h"
 #include "Environment.h"
-
+#include "EnemyTank.h"
 //extern bool keyDown[256];
 //extern bool leftMouseDown;
 //
@@ -33,6 +33,7 @@ extern float bulletSpeedOriginal;
 extern Environment* environment;
 extern PlazmaBall* plazmaBall;
 extern Player* playerRobot;
+extern EnemyTank* enemyTank;
 extern std::vector<PlazmaBall*> plazmaBalls;
 
 extern float fogColour[];

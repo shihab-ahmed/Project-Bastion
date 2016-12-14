@@ -15,6 +15,7 @@ int main(int argc, char** argv)
 	initRendering();
 	playerRobot = new Player(0,0,0);
 	environment = new Environment();
+	enemyTank = new EnemyTank();
 	//Set handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
@@ -154,8 +155,10 @@ void drawScene()
 	}
 	glPopMatrix();
 	//done line for gun range
-
+	environment->DrawEnvironment();
+	enemyTank->DrawTankType1();
 	glutWireCube(1);
+
 	playerRobot->DrawPlayer();
 	glPopMatrix();
 	
