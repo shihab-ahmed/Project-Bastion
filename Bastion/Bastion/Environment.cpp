@@ -1,79 +1,25 @@
-#include <GL/glut.h>
-#include "Lighting.h"
-void BuildingA()
+#include <gl/glut.h>
+#include "Environment.h"
+
+
+
+Environment::Environment()
 {
-	glPushMatrix();
-	glTranslatef(0, 0, -4);
-	glScalef(2, 2, 8);
-	glutSolidCube(1);
-	glPopMatrix();
-}
-void BuildingB()
-{
-	glPushMatrix();
-	glTranslatef(0, 0, -2);
-	glScalef(2, 2, 4);
-	glutSolidCube(1);
-	glPopMatrix();
-}
-void BuildingC()
-{
-	glPushMatrix();
-	glTranslatef(0, 0, -2);
-	glScalef(3, 3, 4);
-	glutSolidCube(1);
-	glPopMatrix();
-}
-void BuildingD()
-{
-	glPushMatrix();
-	glTranslatef(0, 0, -4);
-	glScalef(3, 3, 8);
-	glutSolidCube(1);
-	glPopMatrix();
 }
 
-void Ground()
+void Environment::makeGrid(float size) 
 {
-	glPushMatrix();
-	glScalef(15, 15, 1);
-	glutSolidCube(1);
-	glPopMatrix();
+	//glColor4f(0.0f, 0.0f, 0.0f, 1.0f );
+	glBegin(GL_LINES);
+	for (int i = -size; i <= size; ++i) {
+		glVertex3f(i, 0, -size);
+		glVertex3f(i, 0, size);
+
+		glVertex3f(size, 0, i);
+		glVertex3f(-size, 0, i);
+	}
+	glEnd();
 }
-void Environment()
+Environment::~Environment()
 {
-	glPushMatrix();
-	glEnable(GL_LIGHTING);
-	SetDiffuse(.7,.7,.7);
-	SetAmbient(.7, .7, .7);
-	glTranslatef(0,-5.5,0);
-	glRotatef(90,1,0,0);
-	glScalef(3,3,3);
-
-	glPushMatrix();
-	Ground();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(4, 4, 0);
-	BuildingA();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(4, -4, 0);
-	BuildingB();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-4,4, 0);
-	BuildingC();
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-4, -4, 0);
-	BuildingD();
-	glPopMatrix();
-	
-	glDisable(GL_LIGHTING);
-	glPopMatrix();
 }
