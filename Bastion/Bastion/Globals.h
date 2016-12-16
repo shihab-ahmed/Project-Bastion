@@ -3,11 +3,12 @@
 #include "PlazmaBall.h"
 #include "Environment.h"
 #include "EnemyTank.h"
+#include "Building.h"
 //extern bool keyDown[256];
 //extern bool leftMouseDown;
 //
 //extern bool isFullscreen;
-//extern float bulletSpeed;
+extern float bulletSpeed;
 extern float bulletSpeedOriginal;
 //extern int playerHealth;
 //
@@ -25,7 +26,7 @@ extern float bulletSpeedOriginal;
 //extern int slowMotionCounter;
 //extern float slowMotionDuration;
 
-//extern int mapSize;
+extern int mapSize;
 
 //extern int lastMouseX;
 //extern float lagDistance;
@@ -33,8 +34,9 @@ extern float bulletSpeedOriginal;
 extern Environment* environment;
 extern PlazmaBall* plazmaBall;
 extern Player* playerRobot;
-extern EnemyTank* enemyTank;
 extern std::vector<PlazmaBall*> plazmaBalls;
+extern std::vector<Building*> buildings;
+extern std::vector<EnemyTank*> enemyTanks;
 
 extern float fogColour[];
 extern float originalfogColour[];

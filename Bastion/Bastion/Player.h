@@ -1,4 +1,3 @@
-
 #include "Definition.h"
 #include "PlazmaBall.h"
 #pragma once
@@ -8,6 +7,8 @@ public:
 	Player(float positionX, float positionZ, float initialRotation);
 	int BeltRotation();
 	void DrawHeroMiddleBody();
+	void damage(int amount);
+	bool isHitBy(PlazmaBall * theBullet);
 	float playerLegRotation();
 	void WalkingState(bool isWalk);
 	void accelerate(bool directionIsForward);
@@ -15,6 +16,7 @@ public:
 	float givePosZ();
 	void rotate(bool directionIsPositive);
 	void move();
+	float giveSpeed();
 	float giveTurretRotation();
 	float giveTurretRotationSpeed();
 	float giveSpeedX();
@@ -26,6 +28,7 @@ public:
 	float PlayerDepth();
 	void rotateTurret(float amount);
 	bool fire();
+	bool canMoveTo(float newX, float newZ);
 	void DrawPlayer();
 	~Player();
 private:

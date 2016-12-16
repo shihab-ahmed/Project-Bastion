@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "Player.h"
+#include "CollisionDetection.h"
 #define PI 3.141592654
 using namespace std;
 Player::Player(float positionX, float positionZ, float initialRotation)
@@ -16,7 +17,7 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
 	this->health = 3;
-	this->reloadTime = 20;
+	this->reloadTime = 50;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
 	this->sightRange = 23.0f;
@@ -1619,35 +1620,24 @@ void DrawLeftLeg()
 	glPopMatrix();//left leg final pop
 
 }
-//void UpdateRotation()
-//{
-//	if (isLeftHandMaxReach)
-//	{
-//		LeftHandRotation -= 2.0f;
-//		if (LeftHandRotation < -20)
-//		{
-//			isLeftHandMaxReach = false;
-//		}
-//	}
-//	else
-//	{
-//		LeftHandRotation += 2.0f;
-//		if (LeftHandRotation > 20)
-//		{
-//			isLeftHandMaxReach = true;
-//		}
-//	}
-//
-//}
+
+void Player::damage(int amount) {
+	this->health -= amount;
+}
+bool Player::isHitBy(PlazmaBall* theBullet) {
+	float x = theBullet->givePosX() - this->givePosX();
+	float z = theBullet->givePosZ() - this->givePosZ();
+	return x*x + z*z < (this->width * 1)*(this->width * 1);
+}
 float Player::playerLegRotation()
 {
 	
 	if (this->isWalking)
 	{
-		cout << "walkng" << endl;
+		//cout << "walkng" << endl;
 		if (this->legRotationMaxReached)
 		{
-			this->legRotation -= 1.0f;
+			this->legRotation -= 1.5f;
 			if (this->legRotation <- 15)
 			{
 				this->legRotationMaxReached = false;
@@ -1655,7 +1645,7 @@ float Player::playerLegRotation()
 		}
 		else
 		{
-			this->legRotation += 1.0f;
+			this->legRotation += 1.5f;
 			if (this->legRotation >15)
 			{
 				this->legRotationMaxReached = true;
@@ -1665,7 +1655,7 @@ float Player::playerLegRotation()
 	}
 	else
 	{
-		cout << "not walkng" << endl;
+		//cout << "not walkng" << endl;
 		this->legRotation = 0;
 	}
 	return this->legRotation;
@@ -1679,11 +1669,11 @@ void Player::accelerate(bool directionIsForward)
 {
 	
 	if (directionIsForward) {
-		this->speed += 0.01;
+		this->speed += 0.02;
 		
 	}
 	else {
-		this->speed -= 0.01;
+		this->speed -= 0.02;
 	}
 }
 float Player::givePosX() {
@@ -1707,16 +1697,16 @@ void Player::rotate(bool directionIsPositive)
 	}
 }
 void Player::move() {
-	this->speedX = -(this->speed + this->boostSpeed) * sin(this->rotation * PI / 180);
-	this->speedZ = -(this->speed + this->boostSpeed) * cos(this->rotation * PI / 180);
+	this->speedX = -(this->speed) * sin(this->rotation * PI / 180);
+	this->speedZ = -(this->speed) * cos(this->rotation * PI / 180);
 
-	if (1) {
+	if (this->canMoveTo(this->posX + this->speedX, this->posZ)) {
 		this->posX += this->speedX;
 	}
 	else {
 		this->speedX *= 0.5f;
 	}
-	if (1) {
+	if (this->canMoveTo(this->posX, this->posZ + this->speedZ)) {
 		this->posZ += this->speedZ;
 	}
 	else {
@@ -1730,6 +1720,7 @@ void Player::move() {
 	this->rotationSpeed *= 0.5f;
 	this->speed *= 0.8f;
 	this->boostSpeed *= 0.8f;
+
 	if (this->rotation > 360.0f) {
 		this->rotation -= 360.0f;
 	}
@@ -1749,7 +1740,10 @@ void Player::move() {
 	this->recoilDistance *= 0.8f;
 	this->shieldOpacity *= 0.95f;
 }
-
+float Player::giveSpeed()
+{
+	return this->speed;
+}
 float Player::giveTurretRotation() {
 	return this->turretRotation;
 }
@@ -1804,6 +1798,27 @@ bool Player::fire() {
 		return true;
 	}
 	return false;
+}
+bool Player::canMoveTo(float newX, float newZ)
+{
+	if (newX > mapSize - 1.0f || newX < -mapSize + 1.0f || newZ > mapSize - 1.0f || newZ < -mapSize + 1.0f) {
+	
+		return false;
+	}
+	/*for (int i = 0; i < tanks.size(); i++) {
+		if (this != tanks[i] && distanceBetween(newX, newZ, tanks[i]->posX, tanks[i]->posZ) < 1.5f) {
+			return false;
+		}
+	}*/
+	for (int i = 0; i < buildings.size(); i++) {
+		if (distanceBetween(newX, newZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < buildings[i]->giveWidth()/2) {
+			return false;
+		}
+	}
+	/*if (this != playerTank && distanceBetween(newX, newZ, playerTank->posX, playerTank->posZ) < 1.5f) {
+		return false;
+	}*/
+	return true;
 }
 void Player::DrawPlayer()
 {

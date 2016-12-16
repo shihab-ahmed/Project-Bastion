@@ -1,6 +1,5 @@
 #include "Main.h"
 #include "GlobalVariable.h"
-//#include "Environment.h"
 using namespace std;
 int main(int argc, char** argv)
 {
@@ -15,7 +14,10 @@ int main(int argc, char** argv)
 	initRendering();
 	playerRobot = new Player(0,0,0);
 	environment = new Environment();
-	enemyTank = new EnemyTank();
+	
+
+	addBuilding();
+	addEnemyTank();
 	//Set handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
@@ -24,6 +26,7 @@ int main(int argc, char** argv)
 	glutPassiveMotionFunc(handlePassiveMouse);
 	glutReshapeFunc(handleResize);
 	glutIgnoreKeyRepeat(true);
+
 	if (isFullscreen) 
 	{
 		glutSetCursor(GLUT_CURSOR_NONE);
@@ -38,18 +41,48 @@ int main(int argc, char** argv)
 	glutMainLoop();
 	return 0;
 }
+void addBuilding()
+{
+	buildings.push_back(new Building(float(-70), float(-70), 20, 20, 20));
+	buildings.push_back(new Building(float( 70), float(-70), 20, 20, 20));
+	buildings.push_back(new Building(float(-70), float( 70), 20, 20, 20));
+	buildings.push_back(new Building(float( 70), float( 70), 20, 20, 20));
+
+	buildings.push_back(new Building(float(-26), float(-26), 20, 30, 30));
+	buildings.push_back(new Building(float( 26), float(-26), 20, 30, 30));
+	buildings.push_back(new Building(float(-26), float( 26), 20, 30, 30));
+	buildings.push_back(new Building(float( 26), float( 26), 20, 30, 30));
+
+	buildings.push_back(new Building(float(-26), float( 70), 20, 30, 20));
+	buildings.push_back(new Building(float( 26), float( 70), 20, 30, 20));
+	buildings.push_back(new Building(float(-26), float(-70), 20, 30, 20));
+	buildings.push_back(new Building(float( 26), float(-70), 20, 30, 20));
+
+	buildings.push_back(new Building(float(-70), float( 26), 20, 20, 30));
+	buildings.push_back(new Building(float(-70), float(-26), 20, 20, 30));
+	buildings.push_back(new Building(float( 70), float( 26), 20, 20, 30));
+	buildings.push_back(new Building(float( 70), float(-26), 20, 20, 30));
+	
+}
+void addEnemyTank()
+{
+	enemyTanks.push_back(new EnemyTank(1,1,0));
+	//enemyTanks.push_back(new EnemyTank(20, 1, 0));
+	//enemyTanks.push_back(new EnemyTank(40, 1, 90));
+}
 
 //Initializes 3D rendering
 void initRendering() {
 
-	glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
+	//glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
+	glClearColor(0.1, 0.1, 0.1,1);
 
 	// set the fog attributes
 	glFogf(GL_FOG_START, 1.0f);
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.1f);
+	glFogf(GL_FOG_DENSITY, 0.03f);
 
 	// enable the fog
 	glEnable(GL_FOG);
@@ -78,23 +111,45 @@ void update(int value)
 
 	bool bulletNotDead = true;
 
-	for (int i = 0; i < plazmaBalls.size(); i++) 
+	for (int i = 0; i < plazmaBalls.size(); i++)
 	{
 		plazmaBalls[i]->move();
-		plazmaBalls[i]->flagAsDead();
-	}
-
-	for (int i = 0; i < plazmaBalls.size(); i++) 
-	{
-		if (plazmaBalls[i]->isDead()) {
-			//delete plazmaBalls[i];
-			//plazmaBalls.erase(plazmaBalls.begin() + i);
+		bulletNotDead = true;
+		/*for (int j = 0; j < enemyTanks.size() && bulletNotDead; j++) 
+		{
+			if (enemyTanks[j]->isHitBy(plazmaBalls[i]))
+			{
+				enemyTanks[j]->damage(1);
+				plazmaBalls[i]->flagAsDead();
+				bulletNotDead = false;
+				cout << "Tank is hit" << endl;
+			}
+		}*/
+		if (bulletNotDead && playerRobot->isHitBy(plazmaBalls[i])) 
+		{
+			playerRobot->damage(1);
+			plazmaBalls[i]->flagAsDead();
+			cout << "Player is hit" << endl;
 		}
 	}
 
-	fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];
+	/*for (int i = 0; i < plazmaBalls.size(); i++) {
+		if (plazmaBalls[i]->isDead()) {
+			delete plazmaBalls[i];
+			plazmaBalls.erase(plazmaBalls.begin() + i);
+			cout << "bullet destroyed";
+		}
+	}*/
+	for (int i = 0; i < enemyTanks.size(); i++) 
+	{
+		enemyTanks[i]->move();
+		enemyTanks[i]->runAI();
+		//slowMotionCounter = 0;
+	}
+
+	/*fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];
 	fogColour[1] = (1.0f - radarVisionMagnitude)*originalfogColour[1];
-	fogColour[2] = (1.0f - radarVisionMagnitude)*originalfogColour[2];
+	fogColour[2] = (1.0f - radarVisionMagnitude)*originalfogColour[2];*/
 
 	lagDistance *= 0.95;
 	screenShakeMagnitude *= 0.95;
@@ -116,7 +171,7 @@ void drawScene()
 	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
-
+	//glTranslatef(0.0f, 0.0f, -7.0f);
 	glPushMatrix();
 
 	//Camera start
@@ -132,13 +187,19 @@ void drawScene()
 	for (int i = 0; i < plazmaBalls.size(); i++) 
 	{
 		plazmaBalls[i]->drawPlazmaBall();
-		cout << "Shot";
+		//cout << "Shot";
 	}
-
+	for (int i = 0; i < buildings.size(); i++) {
+		buildings[i]->drawSelf();
+	}
+	for (int i = 0; i < enemyTanks.size(); i++) {
+		enemyTanks[i]->DrawTankType1();
+	}
 	environment->makeGrid(mapSize);
+
 	//Creating line for gun range
 	glPushMatrix();
-	glTranslatef(playerRobot->givePosX()+playerRobot->playerWidth()/4, (playerRobot->PlayerHeight()) / 16, playerRobot->givePosZ());
+	glTranslatef(playerRobot->givePosX(), 1.0f, playerRobot->givePosZ());
 	glRotatef(playerRobot->giveRotation() + playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
 	//glColor4f(0.1f, 0.7f, 1.0f, 0.2f);
 
@@ -150,30 +211,29 @@ void drawScene()
 		glTranslatef(0.0f, 0.0f, -seperation*i);
 		glRotatef(-playerRobot->giveRotation() - playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
 		glTranslatef(-playerRobot->giveSpeedX()*bulletTravel, 0.0f, -playerRobot->giveSpeedZ()*bulletTravel);
-		glutSolidSphere(0.03f, 10, 10);
+		glutSolidSphere(0.05f, 10, 10);
 		glPopMatrix();
 	}
 	glPopMatrix();
 	//done line for gun range
-	environment->DrawEnvironment();
-	enemyTank->DrawTankType1();
-	glutWireCube(1);
 
-	playerRobot->DrawPlayer();
+
+	glPushMatrix();
+	//enemyTank->DrawTankType1();
 	glPopMatrix();
-	
-	
-	
-	glutSwapBuffers();
-}
 
-void renderBitmapString(float x, float y, float z, void *font, char *string)
-{
-	/*char *c;
-	glRasterPos3f(x, y, z);
-	for (c = string; *c != '\0'; c++) {
-		glutBitmapCharacter(font, *c);
-	}*/
+	environment->DrawEnvironment();	
+	glutWireCube(1);
+	playerRobot->DrawPlayer();
+
+
+	glPopMatrix();
+
+	/*for (int i = 0; i < buildings.size(); i++) {
+		buildings[i]->drawSelf();
+	}
+	glPopMatrix();*/
+	glutSwapBuffers();
 }
 
 
@@ -185,7 +245,7 @@ void handlePassiveMouse(int x, int y) {
 		glutWarpPointer(770, 450);
 		if (leftMouseDown) {
 			playerFire(GLUT_LEFT_BUTTON, GLUT_DOWN, 0, 0);
-			cout << "Left mouse";
+			//cout << "Left mouse";
 		}
 		lastMouseX = 770;
 	}
@@ -203,29 +263,29 @@ void checkInput()
 	if (keyDown['w']) {
 		playerRobot->accelerate(true);
 		playerRobot->WalkingState(true);
-		cout << "w" << endl;
+		//cout << "w" << endl;
 	}
 	if (keyDown['s']) {
 		playerRobot->accelerate(false);
 		playerRobot->WalkingState(true);
-		cout << "s" << endl;
+		//cout << "s" << endl;
 	}
 	if (!keyDown['w']&& !keyDown['s']) {
 		playerRobot->WalkingState(false);
 	}
 	if (keyDown['a']) {
 		playerRobot->rotate(true);
-		cout << "a" << endl;
+		//cout << "a" << endl;
 	}
 	if (keyDown['d']) {
 		playerRobot->rotate(false);
-		cout << "d" << endl;
+		//cout << "d" << endl;
 	}
 	if (keyDown[' '] || leftMouseDown)
 	{
 		if (playerRobot->fire()) 
 		{
-			cout << "i am here";
+			//cout << "i am here";
 		}
 	}
 	/*if (keyDown['i']) {
@@ -299,7 +359,7 @@ void playerFire(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_DOWN) {
 			leftMouseDown = true;
-			cout << "is true";
+			//cout << "is true";
 		}
 		else {
 			leftMouseDown = false;

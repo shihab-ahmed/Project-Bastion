@@ -19,16 +19,17 @@ bool slowMotionActivated = false;
 float slowMotionMagnitude = 0;
 int slowMotionCounter = 0;
 float slowMotionDuration = 20.0f;
-int mapSize = 70;
+int mapSize = 80;
 bool invincibility = false;
 int lastMouseX = 770;
 float lagDistance = 0;
-float fogColour[] = { 0.1f,0.6f,0.9f,0.0f };
+float fogColour[] = { 0.5f,0.5f,0.5f,0.0f };
 float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 
-EnemyTank* enemyTank;
 PlazmaBall* plazmaBall;
 Player* playerRobot;
 Environment* environment;
 std::vector<PlazmaBall*> plazmaBalls;
+std::vector<Building*> buildings;
+std::vector<EnemyTank*> enemyTanks;
 #endif 

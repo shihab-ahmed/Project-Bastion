@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="EnemyTank.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -26,6 +28,8 @@
     <ClCompile Include="PlazmaBall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="Definition.h" />
     <ClInclude Include="EnemyTank.h" />
     <ClInclude Include="Environment.h" />

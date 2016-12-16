@@ -1,6 +1,6 @@
 #include "PlazmaBall.h"
 #include "Globals.h"
-
+#include "CollisionDetection.h"
 
 
 
@@ -20,7 +20,7 @@ void PlazmaBall::drawPlazmaBall() {
 	glPushMatrix();
 	glTranslatef(this->posX, this->posY, this->posZ);
 	//glColor3f(0.0f, 0.0f, 0.0f);
-	glutSolidSphere(0.06, 8, 8);
+	glutSolidSphere(0.1, 8, 8);
 	glPopMatrix();
 }
 
@@ -29,15 +29,12 @@ void PlazmaBall::move() {
 	this->speedZ = this->originalSpeedZ;
 	this->posX += this->speedX;
 	this->posZ += this->speedZ;
-	/*if (!slowMotionMagnitude > 0.0f) {
-		this->remainingLife--;
-	}
 	this->remainingLife -= 1;
-	for (int i = 0; i < obstacles.size(); i++) {
-		if (distanceBetween(this->posX, this->posZ, obstacles[i]->givePosX(), obstacles[i]->givePosZ()) < obstacles[i]->giveRadius()) {
+	for (int i = 0; i < buildings.size(); i++) {
+		if (distanceBetween(this->posX, this->posZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < 2) {
 			this->flagAsDead();
 		}
-	}*/
+	}
 }
 
 void PlazmaBall::flagAsDead() {
