@@ -20,7 +20,7 @@ EnemyTank::EnemyTank(float positionX, float positionZ, float initialRotation)
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
 	this->health = 3;
-	this->reloadTime = 100;
+	this->reloadTime = 50;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
 	this->sightRange = 15.0f;
@@ -139,6 +139,10 @@ void TankFireSystem() {
 	quadratic = gluNewQuadric();
 
 	glPushMatrix();
+	lighting->SetDiffuse(.18, .18, .16, 1);
+	lighting->SetAmbient(.18, .18, .16, 1);
+	lighting->SetSpecular(.18, .18, .16, 1);
+	lighting->SetShininess(100);
 	glTranslatef(0, -.05, 0);
 	//For Rotation and Fitting With Body
 	glPushMatrix();
@@ -224,7 +228,7 @@ void TankFireSystem() {
 	glPopMatrix();
 
 	glPopMatrix();
-
+	lighting->LightReset();
 	glPopMatrix();
 }
 
@@ -233,6 +237,11 @@ void TankBodyFireJoin() {
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
 	//Circle join
+	glPushMatrix();
+	lighting->SetDiffuse(.16, .16, .14, 1);
+	lighting->SetAmbient(.16, .16, .14, 1);
+	lighting->SetSpecular(.16, .16, .14, 1);
+	lighting->SetShininess(100);
 	glPushMatrix();
 	glTranslatef(0, .45, 0);
 	glRotatef(90, 1, 0, 0);
@@ -245,6 +254,8 @@ void TankBodyFireJoin() {
 	glTranslatef(0, .65, 0);
 	glRotatef(90, 1, 0, 0);
 	gluCylinder(quadratic, .14, .14, .2, 25, 25);
+	glPopMatrix();
+	lighting->LightReset();
 	glPopMatrix();
 }
 void Turret()
@@ -274,7 +285,8 @@ bool EnemyTank::canMoveTo(float newX, float newZ)
 
 		return false;
 	}
-	if (isClipped(newX, newZ))
+
+	if (isClipped(newX + getMiddleBodyDistance(newX, this->width *2), newZ + getMiddleBodyDistance(newZ,this->depth)))
 	{
 		cout << "Is clipped" << endl;
 		return false;
@@ -386,14 +398,14 @@ void EnemyTank::turnTurretToward(float newAngle) {
 	}
 }
 bool EnemyTank::fire() {
-	cout << "fired" << endl;
+	
 	if (this->reloadCounter <= 0) 
 	{
 		float angle = this->rotation + this->turretRotation;
 		plazmaBalls.push_back(new PlazmaBall(this->posX - 1.0*sin(angle * PI / 180),
 			0.65f,
 			this->posZ - 1.0*cos(angle * PI / 180), this->speedX, this->speedZ,
-			angle
+			angle,0
 		));
 		this->reloadCounter = this->reloadTime;
 		//cout << "fired" << endl;
@@ -427,7 +439,7 @@ void EnemyTank::runAI()
 		this->turnTurretToward(this->angleTo(pX, pZ));
 		if (this->isAimed) {
 			this->fire();
-			cout << "fire" << endl;
+			
 		}
 		this->lastSightingX = playerRobot->givePosX();
 		this->lastSightingZ = playerRobot->givePosZ();
@@ -544,10 +556,11 @@ float EnemyTank::getWheelRotation()
 void EnemyTank::damage(int amount) {
 	this->health -= amount;
 }
-bool EnemyTank::isHitBy(PlazmaBall* theBullet) {
+bool EnemyTank::isHitBy(PlazmaBall* theBullet)
+{
 	float x = theBullet->givePosX() - this->givePosX();
 	float z = theBullet->givePosZ() - this->givePosZ();
-	return x*x + z*z < (this->width * 1)*(this->width * 1);
+	return x*x + z*z < (this->width * 2)*(this->width * 2);
 }
 void EnemyTank::WalkingState(bool isWalk)
 {
@@ -612,11 +625,17 @@ void EnemyTank::DrawTankType1()
 	glScalef(width,height,depth);
 
 	glPushMatrix();//final push
-	glTranslatef(-.05,-.1,0);
+	glTranslatef(0,-.1,0);
 	glRotatef(90, 0.0f, 1.0f, 0.0f);
 	glScalef(.6,.6,.6);
+
 	glPushMatrix();
+	lighting->SetDiffuse(.18, .18, .16, 1);
+	lighting->SetAmbient(.18, .18, .16, 1);
+	lighting->SetSpecular(.18,.18,.16,1);
+	lighting->SetShininess(100);
 	TankBody();
+	lighting->LightReset();
 	glPopMatrix();
 
 
@@ -625,8 +644,11 @@ void EnemyTank::DrawTankType1()
 	Turret();
 	glPopMatrix();
 
+	glPushMatrix();
 
 	glPushMatrix();
+	lighting->SetDiffuse(.2, .2, .18, 1);
+	lighting->SetAmbient(.2, .2, .18, 1);
 	glTranslatef(1,0,0);
 	glScalef(.45,.45,.45);
 	TankTire();
@@ -649,7 +671,8 @@ void EnemyTank::DrawTankType1()
 	glScalef(.45, .45, .45);
 	TankTire();
 	glPopMatrix();
-
+	lighting->LightReset();
+	glPopMatrix();
 	
 	glPopMatrix();//final pop
 

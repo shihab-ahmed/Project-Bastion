@@ -6,6 +6,7 @@
 #include "EnemyTank.h"
 #include "Building.h"
 #include "CollisionDetection.h"
+#include "Lighting.h"
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void handlePassiveMouse(int x, int y);

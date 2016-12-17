@@ -17,7 +17,7 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
 	this->health = 3;
-	this->reloadTime = 50;
+	this->reloadTime = 30;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
 	this->sightRange = 23.0f;
@@ -1669,11 +1669,11 @@ void Player::accelerate(bool directionIsForward)
 {
 	
 	if (directionIsForward) {
-		this->speed += 0.02;
+		this->speed += 0.04;
 		
 	}
 	else {
-		this->speed -= 0.02;
+		this->speed -= 0.04;
 	}
 }
 float Player::givePosX() {
@@ -1696,7 +1696,8 @@ void Player::rotate(bool directionIsPositive)
 		this->rotationSpeed /= (this->boostSpeed)*100.0f;
 	}
 }
-void Player::move() {
+void Player::move() 
+{
 	this->speedX = -(this->speed) * sin(this->rotation * PI / 180);
 	this->speedZ = -(this->speed) * cos(this->rotation * PI / 180);
 
@@ -1791,7 +1792,7 @@ bool Player::fire() {
 		plazmaBalls.push_back(new PlazmaBall(this->posX - 1.0*sin(angle * PI / 180),
 			0.65f,
 			this->posZ - 1.0*cos(angle * PI / 180), this->speedX, this->speedZ,
-			angle
+			angle,1
 		));
 		this->reloadCounter = this->reloadTime;
 		this->curRecoilForce += this->recoilStrength;
@@ -1810,11 +1811,6 @@ bool Player::canMoveTo(float newX, float newZ)
 	{
 		return false;
 	}
-	/*for (int i = 0; i < buildings.size(); i++) {
-		if (distanceBetween(newX, newZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < buildings[i]->giveWidth()/2) {
-			return false;
-		}
-	}*/
 	return true;
 }
 void Player::DrawPlayer()

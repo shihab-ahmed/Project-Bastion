@@ -4,6 +4,7 @@
 #include "Environment.h"
 #include "EnemyTank.h"
 #include "Building.h"
+#include "Lighting.h"
 //extern bool keyDown[256];
 //extern bool leftMouseDown;
 //
@@ -34,6 +35,7 @@ extern int mapSize;
 extern Environment* environment;
 extern PlazmaBall* plazmaBall;
 extern Player* playerRobot;
+extern Lighting* lighting;
 extern std::vector<PlazmaBall*> plazmaBalls;
 extern std::vector<Building*> buildings;
 extern std::vector<EnemyTank*> enemyTanks;

@@ -130,7 +130,7 @@ void Building::BuildingA()
 void Building::drawSelf() 
 {
 	glPushMatrix();
-	glTranslatef(this->posX, this->height/2.5, this->posZ);
+	glTranslatef(this->posX, this->height/2.3, this->posZ);
 	glScalef(width,height,depth);
 	glutWireCube(1);
 	this->BuildingA();

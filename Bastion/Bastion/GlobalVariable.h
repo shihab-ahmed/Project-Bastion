@@ -29,6 +29,7 @@ float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 PlazmaBall* plazmaBall;
 Player* playerRobot;
 Environment* environment;
+Lighting* lighting;
 std::vector<PlazmaBall*> plazmaBalls;
 std::vector<Building*> buildings;
 std::vector<EnemyTank*> enemyTanks;

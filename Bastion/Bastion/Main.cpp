@@ -10,11 +10,12 @@ int main(int argc, char** argv)
 	glutInitWindowPosition(50, 50);
 
 	//Create the window
-	glutCreateWindow("Tanks!");
-	initRendering();
+	glutCreateWindow("Tanks!");	
 	playerRobot = new Player(0,0,0);
 	environment = new Environment();
-	
+	lighting =    new Lighting();
+
+	initRendering();
 
 	addBuilding();
 	addEnemyTank();
@@ -77,27 +78,25 @@ void addEnemyTank()
 //Initializes 3D rendering
 void initRendering() {
 
-	//glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
-	glClearColor(0.1, 0.1, 0.1,1);
-
+	glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
+	//glClearColor(0,0,0,0);
 	// set the fog attributes
 	glFogf(GL_FOG_START, 1.0f);
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.03f);
+	glFogf(GL_FOG_DENSITY, 0.05f);
 
 	// enable the fog
 	glEnable(GL_FOG);
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING); //Enable lighting
-	glEnable(GL_LIGHT0); //Enable light #0
-	glEnable(GL_LIGHT1); //Enable light #1
-	glEnable(GL_NORMALIZE); //Automatically normalize normals
+	//glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHTING);   //Enable lighting
+	glEnable(GL_LIGHT0);     //Enable light #0
+	glEnable(GL_LIGHT1);     //Enable light #1
+	glEnable(GL_NORMALIZE);  //Automatically normalize normals
 	glShadeModel(GL_SMOOTH); //Enable smooth shading
 							 //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//Wireframe
 	if (isFullscreen)
@@ -105,6 +104,7 @@ void initRendering() {
 		glutFullScreen();
 		glutWarpPointer(770, 450);
 	}
+	lighting->SetPosition(0,20,0,0);
 }
 
 void update(int value)
@@ -118,38 +118,48 @@ void update(int value)
 	{
 		plazmaBalls[i]->move();
 		bulletNotDead = true;
-		/*for (int j = 0; j < enemyTanks.size() && bulletNotDead; j++) 
+		for (int j = 0; j < enemyTanks.size() && bulletNotDead; j++) 
 		{
-			if (enemyTanks[j]->isHitBy(plazmaBalls[i]))
+		
+			if (enemyTanks[j]->isHitBy(plazmaBalls[i])&&(plazmaBalls[i]->getType()==1))
 			{
 				enemyTanks[j]->damage(1);
 				plazmaBalls[i]->flagAsDead();
 				bulletNotDead = false;
 				cout << "Tank is hit" << endl;
 			}
-		}*/
-		if (bulletNotDead && playerRobot->isHitBy(plazmaBalls[i])) 
+		}
+		/*if (bulletNotDead && playerRobot->isHitBy(plazmaBalls[i])) 
 		{
 			playerRobot->damage(1);
 			plazmaBalls[i]->flagAsDead();
 			
-		}
+		}*/
 	}
 
-	/*for (int i = 0; i < plazmaBalls.size(); i++) {
-		if (plazmaBalls[i]->isDead()) {
+	for (int i = 0; i < plazmaBalls.size(); i++) 
+	{
+		if (plazmaBalls[i]->isDead()) 
+		{
 			delete plazmaBalls[i];
 			plazmaBalls.erase(plazmaBalls.begin() + i);
 			cout << "bullet destroyed";
 		}
-	}*/
+	}
 	for (int i = 0; i < enemyTanks.size(); i++) 
 	{
 		enemyTanks[i]->move();
 		enemyTanks[i]->runAI();
-		//slowMotionCounter = 0;
 	}
-
+	for (int i = 0; i < enemyTanks.size(); i++)
+	{
+		if (enemyTanks[i]->isDead()) {
+			delete enemyTanks[i];
+			enemyTanks.erase(enemyTanks.begin() + i);
+			numTanks--;
+			cout << "tank destroyed";
+		}
+	}
 	/*fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];
 	fogColour[1] = (1.0f - radarVisionMagnitude)*originalfogColour[1];
 	fogColour[2] = (1.0f - radarVisionMagnitude)*originalfogColour[2];*/
@@ -157,9 +167,6 @@ void update(int value)
 	lagDistance *= 0.95;
 	screenShakeMagnitude *= 0.95;
 	zoomMagnitude *= 0.95;
-
-	//cout << "VM:" << radarVisionActivated<<endl;
-	//cout << "FogColor:" << fogColour[0] << endl;
 
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
@@ -186,10 +193,13 @@ void drawScene()
 
 	glTranslatef(-playerRobot->givePosX(), 0.0f, -playerRobot->givePosZ());
 	//Camera end
-
 	for (int i = 0; i < plazmaBalls.size(); i++) 
 	{
-		plazmaBalls[i]->drawPlazmaBall();
+		if(plazmaBalls[i]->getType()==1) plazmaBalls[i]->drawPlazmaBall(1);
+		else
+		{
+			plazmaBalls[i]->drawPlazmaBall(0);
+		}
 		//cout << "Shot";
 	}
 	for (int i = 0; i < buildings.size(); i++) {
@@ -198,8 +208,10 @@ void drawScene()
 	for (int i = 0; i < enemyTanks.size(); i++) {
 		enemyTanks[i]->DrawTankType1();
 	}
-	environment->makeGrid(mapSize);
-
+	//environment->makeGrid(mapSize);
+	environment->groundFloor(mapSize);
+	environment->drawStreet();
+	environment->drawStreetLamp();
 	//Creating line for gun range
 	glPushMatrix();
 	glTranslatef(playerRobot->givePosX(), 1.0f, playerRobot->givePosZ());
@@ -220,22 +232,20 @@ void drawScene()
 	glPopMatrix();
 	//done line for gun range
 
-
-	glPushMatrix();
-	//enemyTank->DrawTankType1();
-	glPopMatrix();
-
 	environment->DrawEnvironment();	
 	glutWireCube(1);
 	playerRobot->DrawPlayer();
 
 
 	glPopMatrix();
-
-	/*for (int i = 0; i < buildings.size(); i++) {
-		buildings[i]->drawSelf();
+	/*glutWireCube(3);
+	glRotatef(0,1,0,0);
+	for (int i = 0; i < enemyTanks.size(); i++) 
+	{
+		enemyTanks[i]->DrawTankType1();
 	}
 	glPopMatrix();*/
+
 	glutSwapBuffers();
 }
 

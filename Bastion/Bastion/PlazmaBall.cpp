@@ -4,7 +4,7 @@
 
 
 
-PlazmaBall::PlazmaBall(float positionX, float positionY, float positionZ, float velX, float velZ, float initialRotation) {
+PlazmaBall::PlazmaBall(float positionX, float positionY, float positionZ, float velX, float velZ, float initialRotation,float type) {
 
 	this->originalSpeedX = velX - bulletSpeedOriginal * sin(PI / 180 * (initialRotation));
 	this->originalSpeedZ = velZ - bulletSpeedOriginal * cos(PI / 180 * (initialRotation));
@@ -13,25 +13,44 @@ PlazmaBall::PlazmaBall(float positionX, float positionY, float positionZ, float 
 	this->posX = positionX;
 	this->posY = positionY;
 	this->posZ = positionZ;
-	this->remainingLife = 500;
+	this->type = type;
+	this->remainingLife = 100;
 }
 
-void PlazmaBall::drawPlazmaBall() {
+void PlazmaBall::drawPlazmaBall(float type) 
+{
 	glPushMatrix();
+	if (type == 1)
+	{
+		lighting->SetDiffuse(0, .7, 1, 1);
+		lighting->SetAmbient(0, .7, 1, 1);
+		lighting->SetEmmision(0, .7, 1, 1);
+		lighting->SetShininess(100);
+	}
+	else
+	{
+		lighting->SetDiffuse(1, .1, .1, 1);
+		lighting->SetAmbient(1, .1, .1, 1);
+		lighting->SetEmmision(1, .1,.1, 1);
+		lighting->SetShininess(100);
+	}
 	glTranslatef(this->posX, this->posY, this->posZ);
-	//glColor3f(0.0f, 0.0f, 0.0f);
-	glutSolidSphere(0.1, 8, 8);
+	glutSolidSphere(.1, 20, 20);
+	lighting->LightReset();
 	glPopMatrix();
 }
 
-void PlazmaBall::move() {
+void PlazmaBall::move() 
+{
 	this->speedX = this->originalSpeedX;
 	this->speedZ = this->originalSpeedZ;
 	this->posX += this->speedX;
 	this->posZ += this->speedZ;
 	this->remainingLife -= 1;
-	for (int i = 0; i < buildings.size(); i++) {
-		if (distanceBetween(this->posX, this->posZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < 2) {
+	for (int i = 0; i < buildings.size(); i++) 
+	{
+		if (distanceBetween(this->posX, this->posZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < 2) 
+		{
 			this->flagAsDead();
 		}
 	}
@@ -51,7 +70,9 @@ float PlazmaBall::givePosX() {
 float PlazmaBall::givePosZ() {
 	return this->posZ;
 }
-
+float PlazmaBall::getType() {
+	return this->type;
+}
 
 PlazmaBall::~PlazmaBall()
 {
