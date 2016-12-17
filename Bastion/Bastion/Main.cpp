@@ -66,9 +66,12 @@ void addBuilding()
 }
 void addEnemyTank()
 {
-	enemyTanks.push_back(new EnemyTank(1,1,0));
-	//enemyTanks.push_back(new EnemyTank(20, 1, 0));
-	//enemyTanks.push_back(new EnemyTank(40, 1, 90));
+	enemyTanks.push_back(new EnemyTank( 50,  0,  0));
+	enemyTanks.push_back(new EnemyTank( 0, -50,  0));
+	enemyTanks.push_back(new EnemyTank(-50, 50,  0));
+	enemyTanks.push_back(new EnemyTank( 50,-50, 90));
+	enemyTanks.push_back(new EnemyTank( 50, 50, 90));
+	enemyTanks.push_back(new EnemyTank( 50,  0, 90));
 }
 
 //Initializes 3D rendering
@@ -129,7 +132,7 @@ void update(int value)
 		{
 			playerRobot->damage(1);
 			plazmaBalls[i]->flagAsDead();
-			cout << "Player is hit" << endl;
+			
 		}
 	}
 

@@ -23,7 +23,7 @@ EnemyTank::EnemyTank(float positionX, float positionZ, float initialRotation)
 	this->reloadTime = 100;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
-	this->sightRange = 23.0f;
+	this->sightRange = 15.0f;
 	this->sightCounter = 0;
 	this->isAimed = false;
 	this->destinX = positionX;
@@ -256,18 +256,35 @@ void Turret()
 	TankFireSystem();
 	glPopMatrix();
 }
+float EnemyTank::getMiddleBodyDistance(float val,float body)
+{
+	if (val > 0)
+	{
+		return body / 2;
+	}
+	else
+	{
+		return -(body / 2);
+	}
+}
 bool EnemyTank::canMoveTo(float newX, float newZ)
 {
+	
 	if (newX > mapSize - 1.0f || newX < -mapSize + 1.0f || newZ > mapSize - 1.0f || newZ < -mapSize + 1.0f) {
 
 		return false;
 	}
-	for (int i = 0; i < buildings.size(); i++) {
+	if (isClipped(newX, newZ))
+	{
+		cout << "Is clipped" << endl;
+		return false;
+	}
+	/*for (int i = 0; i < buildings.size(); i++) {
 		if (distanceBetween(newX, newZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < 2) {
 			return false;
 		}
 	}
-	
+	*/
 	return true;
 }
 void EnemyTank::move() {

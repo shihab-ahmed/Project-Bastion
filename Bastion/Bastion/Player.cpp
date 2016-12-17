@@ -1801,22 +1801,19 @@ bool Player::fire() {
 }
 bool Player::canMoveTo(float newX, float newZ)
 {
+	
 	if (newX > mapSize - 1.0f || newX < -mapSize + 1.0f || newZ > mapSize - 1.0f || newZ < -mapSize + 1.0f) {
 	
 		return false;
 	}
-	/*for (int i = 0; i < tanks.size(); i++) {
-		if (this != tanks[i] && distanceBetween(newX, newZ, tanks[i]->posX, tanks[i]->posZ) < 1.5f) {
-			return false;
-		}
-	}*/
-	for (int i = 0; i < buildings.size(); i++) {
+	if (isClipped(newX+this->speedX, newZ+this->speedZ))
+	{
+		return false;
+	}
+	/*for (int i = 0; i < buildings.size(); i++) {
 		if (distanceBetween(newX, newZ, buildings[i]->givePosX(), buildings[i]->givePosZ()) < buildings[i]->giveWidth()/2) {
 			return false;
 		}
-	}
-	/*if (this != playerTank && distanceBetween(newX, newZ, playerTank->posX, playerTank->posZ) < 1.5f) {
-		return false;
 	}*/
 	return true;
 }

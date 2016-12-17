@@ -6,6 +6,7 @@ public:
 	EnemyTank(float positionX, float positionZ, float initialRotation);
 	~EnemyTank();
 	void TankTire();
+	float getMiddleBodyDistance(float val, float body);
 	bool canMoveTo(float newX, float newZ);
 	void move();
 	void rotateTurret(float amount);
