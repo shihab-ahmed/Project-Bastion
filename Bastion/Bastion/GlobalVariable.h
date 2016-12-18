@@ -4,7 +4,7 @@
 bool keyDown[256];
 bool leftMouseDown = false;
 
-bool isFullscreen = false;
+bool isFullscreen = true;
 float bulletSpeed = 0.5f;
 float bulletSpeedOriginal = 0.5f;
 int playerHealth = 10;
