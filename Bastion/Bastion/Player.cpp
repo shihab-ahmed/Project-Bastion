@@ -16,7 +16,9 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->depth = 2;
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
-	this->health = 3;
+	this->health = 10;
+	this->score = 0;
+	this->shield = 5;
 	this->reloadTime = 30;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
@@ -1624,7 +1626,8 @@ void DrawLeftLeg()
 void Player::damage(int amount) {
 	this->health -= amount;
 }
-bool Player::isHitBy(PlazmaBall* theBullet) {
+bool Player::isHitBy(PlazmaBall* theBullet) 
+{
 	float x = theBullet->givePosX() - this->givePosX();
 	float z = theBullet->givePosZ() - this->givePosZ();
 	return x*x + z*z < (this->width * 1)*(this->width * 1);
@@ -1740,6 +1743,22 @@ void Player::move()
 	this->curRecoilForce *= 0.5f;
 	this->recoilDistance *= 0.8f;
 	this->shieldOpacity *= 0.95f;
+}
+float Player::giveHealth()
+{
+	return this->health;
+}
+float Player::giveShield()
+{
+	return this->shield;
+}
+float Player::giveScore()
+{
+	return this->score;
+}
+void Player::updateScore(float scorePoint)
+{
+	this->score += scorePoint;
 }
 float Player::giveSpeed()
 {

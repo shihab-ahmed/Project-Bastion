@@ -16,6 +16,10 @@ public:
 	float givePosZ();
 	void rotate(bool directionIsPositive);
 	void move();
+	float giveHealth();
+	float giveShield();
+	float giveScore();
+	void updateScore(float scorePoint);
 	float giveSpeed();
 	float giveTurretRotation();
 	float giveTurretRotationSpeed();
@@ -34,6 +38,8 @@ public:
 private:
 	int Beltangle;
 	float speed;
+	int score;
+	int shield;
 	float posX, posZ;
 	float speedX, speedZ;
 	float rotation, rotationSpeed;

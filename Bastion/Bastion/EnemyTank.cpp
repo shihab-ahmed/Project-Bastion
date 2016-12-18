@@ -19,7 +19,7 @@ EnemyTank::EnemyTank(float positionX, float positionZ, float initialRotation)
 	this->rotationSpeed = 0.0f;
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
-	this->health = 3;
+	this->health = 5;
 	this->reloadTime = 50;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
@@ -288,7 +288,6 @@ bool EnemyTank::canMoveTo(float newX, float newZ)
 
 	if (isClipped(newX + getMiddleBodyDistance(newX, this->width *2), newZ + getMiddleBodyDistance(newZ,this->depth)))
 	{
-		cout << "Is clipped" << endl;
 		return false;
 	}
 	/*for (int i = 0; i < buildings.size(); i++) {
@@ -560,7 +559,7 @@ bool EnemyTank::isHitBy(PlazmaBall* theBullet)
 {
 	float x = theBullet->givePosX() - this->givePosX();
 	float z = theBullet->givePosZ() - this->givePosZ();
-	return x*x + z*z < (this->width * 2)*(this->width * 2);
+	return x*x + z*z < (this->width * 1)*(this->width * 1);
 }
 void EnemyTank::WalkingState(bool isWalk)
 {

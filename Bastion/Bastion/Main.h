@@ -7,6 +7,8 @@
 #include "Building.h"
 #include "CollisionDetection.h"
 #include "Lighting.h"
+#include "Collectable.h"
+#include "StatusUI.h"
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void handlePassiveMouse(int x, int y);
@@ -21,6 +23,9 @@ void checkInput();
 void playerFire(int button, int state, int x, int y);
 void addBuilding();
 void addEnemyTank();
+void cleanup();
+float computeScale(const char* strs[4]);
+void drawUI();
 #endif
 
 

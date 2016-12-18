@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="EnemyTank.cpp" />
     <ClCompile Include="Environment.cpp" />
@@ -27,9 +28,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlazmaBall.cpp" />
+    <ClCompile Include="StatusUI.cpp" />
+    <ClCompile Include="text3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Building.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="Definition.h" />
     <ClInclude Include="EnemyTank.h" />
@@ -40,6 +44,8 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlazmaBall.h" />
+    <ClInclude Include="StatusUI.h" />
+    <ClInclude Include="text3d.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3DD95D5C-98EE-464E-AFA3-320FA959AED2}</ProjectGuid>

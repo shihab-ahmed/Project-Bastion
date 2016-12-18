@@ -1,5 +1,6 @@
 #include "Main.h"
 #include "GlobalVariable.h"
+#include "text3d.h"
 using namespace std;
 int main(int argc, char** argv)
 {
@@ -13,7 +14,9 @@ int main(int argc, char** argv)
 	glutCreateWindow("Tanks!");	
 	playerRobot = new Player(0,0,0);
 	environment = new Environment();
-	lighting =    new Lighting();
+	lighting    = new Lighting();
+	statusUI = new StatusUI();
+
 
 	initRendering();
 
@@ -76,16 +79,17 @@ void addEnemyTank()
 }
 
 //Initializes 3D rendering
-void initRendering() {
+void initRendering()
+{
 
-	glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
-	//glClearColor(0,0,0,0);
+	//glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
+	glClearColor(0.8,.8,.8,0);
 	// set the fog attributes
 	glFogf(GL_FOG_START, 1.0f);
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.05f);
+	glFogf(GL_FOG_DENSITY, 0.06f);
 
 	// enable the fog
 	glEnable(GL_FOG);
@@ -105,6 +109,7 @@ void initRendering() {
 		glutWarpPointer(770, 450);
 	}
 	lighting->SetPosition(0,20,0,0);
+	t3dInit();
 }
 
 void update(int value)
@@ -112,8 +117,8 @@ void update(int value)
 	checkInput();
 	playerRobot->move();
 
-	bool bulletNotDead = true;
 
+	bool bulletNotDead = true;
 	for (int i = 0; i < plazmaBalls.size(); i++)
 	{
 		plazmaBalls[i]->move();
@@ -129,35 +134,56 @@ void update(int value)
 				cout << "Tank is hit" << endl;
 			}
 		}
-		/*if (bulletNotDead && playerRobot->isHitBy(plazmaBalls[i])) 
+		if ((plazmaBalls[i]->getType()==0) && playerRobot->isHitBy(plazmaBalls[i])) 
 		{
 			playerRobot->damage(1);
 			plazmaBalls[i]->flagAsDead();
+			cout << "player is hit" << endl;
 			
-		}*/
+		}
 	}
-
-	for (int i = 0; i < plazmaBalls.size(); i++) 
+	for (int i = 0; i < plazmaBalls.size(); i++)
 	{
-		if (plazmaBalls[i]->isDead()) 
+		if (plazmaBalls[i]->isDead())
 		{
 			delete plazmaBalls[i];
 			plazmaBalls.erase(plazmaBalls.begin() + i);
 			cout << "bullet destroyed";
 		}
 	}
-	for (int i = 0; i < enemyTanks.size(); i++) 
+	for (int i = 0; i < enemyTanks.size(); i++)
 	{
 		enemyTanks[i]->move();
 		enemyTanks[i]->runAI();
 	}
+
+	for (int i = 0; i < collectables.size(); i++)
+	{
+		if (collectables[i]->isHitBy(collectables[i]) && (collectables[i]->getType() == 1))
+		{
+			collectables[i]->flagAsDead();
+			playerRobot->updateScore(5);
+		}
+	}
+	for (int i = 0; i < collectables.size(); i++)
+	{
+		if (collectables[i]->isDead())
+		{
+			delete collectables[i];
+			collectables.erase(collectables.begin() + i);
+			cout << "collect item time expired";
+		}
+	}
+	
 	for (int i = 0; i < enemyTanks.size(); i++)
 	{
-		if (enemyTanks[i]->isDead()) {
+		if (enemyTanks[i]->isDead())
+		{
+			collectables.push_back(new Collectable(enemyTanks[i]->givePosX(), 1, enemyTanks[i]->givePosZ(), 0, 1));
 			delete enemyTanks[i];
 			enemyTanks.erase(enemyTanks.begin() + i);
 			numTanks--;
-			cout << "tank destroyed";
+			playerRobot->updateScore(5);
 		}
 	}
 	/*fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];
@@ -182,6 +208,7 @@ void drawScene()
 
 	glLoadIdentity();
 	//glTranslatef(0.0f, 0.0f, -7.0f);
+	
 	glPushMatrix();
 
 	//Camera start
@@ -200,18 +227,24 @@ void drawScene()
 		{
 			plazmaBalls[i]->drawPlazmaBall(0);
 		}
-		//cout << "Shot";
 	}
-	for (int i = 0; i < buildings.size(); i++) {
+	for (int i = 0; i < buildings.size(); i++) 
+	{
 		buildings[i]->drawSelf();
 	}
-	for (int i = 0; i < enemyTanks.size(); i++) {
+	for (int i = 0; i < enemyTanks.size(); i++)
+	{
 		enemyTanks[i]->DrawTankType1();
 	}
-	//environment->makeGrid(mapSize);
+	for (int i = 0; i < collectables.size(); i++) 
+	{
+		collectables[i]->drawCollectable(collectables[i]->getType());
+	}
 	environment->groundFloor(mapSize);
 	environment->drawStreet();
 	environment->drawStreetLamp();
+	
+
 	//Creating line for gun range
 	glPushMatrix();
 	glTranslatef(playerRobot->givePosX(), 1.0f, playerRobot->givePosZ());
@@ -220,7 +253,8 @@ void drawScene()
 
 	float seperation = 2.0f;
 
-	for (int i = 1; i <= 10; i++) {
+	for (int i = 1; i <= 10; i++) 
+	{
 		float bulletTravel = (-seperation*i);
 		glPushMatrix();
 		glTranslatef(0.0f, 0.0f, -seperation*i);
@@ -234,17 +268,10 @@ void drawScene()
 
 	environment->DrawEnvironment();	
 	glutWireCube(1);
-	playerRobot->DrawPlayer();
-
-
+	playerRobot->DrawPlayer();	
 	glPopMatrix();
-	/*glutWireCube(3);
-	glRotatef(0,1,0,0);
-	for (int i = 0; i < enemyTanks.size(); i++) 
-	{
-		enemyTanks[i]->DrawTankType1();
-	}
-	glPopMatrix();*/
+
+	statusUI->drawPlayerStatus(playerRobot->giveHealth(),playerRobot->giveShield(),playerRobot->giveScore());
 
 	glutSwapBuffers();
 }
@@ -271,6 +298,7 @@ void handleActiveMouse(int x, int y) {
 void checkInput() 
 {
 	if (keyDown[27]) {
+		cleanup();
 		exit(0);
 	}
 	if (keyDown['w']) {
@@ -298,53 +326,10 @@ void checkInput()
 	{
 		if (playerRobot->fire()) 
 		{
-			//cout << "i am here";
+			
 		}
 	}
-	/*if (keyDown['i']) {
-		playerRobot->boost();
-		screenShakeMagnitude += 0.02;
-	}
-	if (keyDown['e']) {
-		zoomMagnitude += 0.02;
-	}
-	if (keyDown['k']) {
-		int direction = playerRobot->centerTurret();
-		if (direction > 0) {
-			lagDistance += 2.5;
-		}
-		else if (direction < 0) {
-			lagDistance -= 2.5;
-		}
-	}
-	if (keyDown['u']) {
-		radarVisionActivated = true;
-	}
-	if (keyDown['o']) {
-		slowMotionActivated = true;
-	}
-	if (keyDown['j']) {
-		if (playerTank->giveRotationSpeed() > 0.5f) {
-			playerTank->rotateTurret(1.0f);
-		}
-		else if (playerTank->giveRotationSpeed() < -0.5f) {
-			playerTank->rotateTurret(-1.0f);
-		}
-		playerTank->rotateTurret(1.5f);
-		lagDistance += 2.5;
-	}
-	if (keyDown['l']) {
-		if (playerTank->giveRotationSpeed() > 0.5f) {
-			playerTank->rotateTurret(1.0f);
-		}
-		else if (playerTank->giveRotationSpeed() < -0.5f) {
-			playerTank->rotateTurret(-1.0f);
-		}
-		playerTank->rotateTurret(-1.5f);
-		lagDistance -= 2.5;
-	}
-
-	}*/
+	
 }
 
 //Called when a key is pressed
@@ -379,6 +364,23 @@ void playerFire(int button, int state, int x, int y) {
 		}
 
 	}
+}
+void cleanup() 
+{
+	t3dCleanup();
+}
+float computeScale(const char* strs[4]) 
+{
+	float maxWidth = 0;
+	for (int i = 0; i < 4; i++) 
+	{
+		float width = t3dDrawWidth(strs[i]);
+		if (width > maxWidth) {
+			maxWidth = width;
+		}
+	}
+
+	return 2.6f / maxWidth;
 }
 
 ////void createTank(float x, float y) {

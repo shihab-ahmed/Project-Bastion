@@ -27,11 +27,13 @@ void Lighting::LightReset()
 	GLfloat mat_specular[] = {0, 0, 0, 1.0 };
 	GLfloat shininess[] = { 0 };
 	GLfloat mat_emission[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat position[] = { 0.0, 0.0, 0.0, 1.0 };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+	glLightfv(GL_LIGHT1, GL_POSITION, position);
 }
 
 void Lighting::SetDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha)

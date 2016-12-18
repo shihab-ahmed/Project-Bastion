@@ -19,6 +19,7 @@ PlazmaBall::PlazmaBall(float positionX, float positionY, float positionZ, float 
 
 void PlazmaBall::drawPlazmaBall(float type) 
 {
+
 	glPushMatrix();
 	if (type == 1)
 	{
