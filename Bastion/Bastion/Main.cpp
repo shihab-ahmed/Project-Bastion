@@ -117,6 +117,10 @@ void update(int value)
 	checkInput();
 	playerRobot->move();
 
+	if ((playerRobot->giveShieldStrength() <= 0.0) || (playerRobot->giveShield()<= 0))
+	{
+		playerRobot->setShieldTriggered(false);
+	}
 
 	bool bulletNotDead = true;
 	for (int i = 0; i < plazmaBalls.size(); i++)
@@ -131,14 +135,20 @@ void update(int value)
 				enemyTanks[j]->damage(1);
 				plazmaBalls[i]->flagAsDead();
 				bulletNotDead = false;
-				cout << "Tank is hit" << endl;
 			}
 		}
 		if ((plazmaBalls[i]->getType()==0) && playerRobot->isHitBy(plazmaBalls[i])) 
 		{
-			playerRobot->damage(1);
+			if (playerRobot->giveShield() > 0)
+			{
+				playerRobot->shieldDamage();
+				playerRobot->setShieldTriggered(true);
+			}
+			else
+			{
+				playerRobot->damage(1);
+			}			
 			plazmaBalls[i]->flagAsDead();
-			cout << "player is hit" << endl;
 			
 		}
 	}
@@ -148,7 +158,6 @@ void update(int value)
 		{
 			delete plazmaBalls[i];
 			plazmaBalls.erase(plazmaBalls.begin() + i);
-			cout << "bullet destroyed";
 		}
 	}
 	for (int i = 0; i < enemyTanks.size(); i++)
@@ -162,7 +171,7 @@ void update(int value)
 		if (collectables[i]->isHitBy(collectables[i]) && (collectables[i]->getType() == 1))
 		{
 			collectables[i]->flagAsDead();
-			playerRobot->updateScore(5);
+			playerRobot->updateScore(EnergyCollect);
 		}
 	}
 	for (int i = 0; i < collectables.size(); i++)
@@ -171,7 +180,6 @@ void update(int value)
 		{
 			delete collectables[i];
 			collectables.erase(collectables.begin() + i);
-			cout << "collect item time expired";
 		}
 	}
 	
@@ -183,7 +191,7 @@ void update(int value)
 			delete enemyTanks[i];
 			enemyTanks.erase(enemyTanks.begin() + i);
 			numTanks--;
-			playerRobot->updateScore(5);
+			playerRobot->updateScore(EnemyDestroyed);
 		}
 	}
 	/*fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];

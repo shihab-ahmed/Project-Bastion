@@ -5,6 +5,9 @@ class Player
 {
 public:
 	Player(float positionX, float positionZ, float initialRotation);
+	void setShieldTriggered(bool trigger);
+	int giveShieldStrength();
+	void shieldDamage();
 	int BeltRotation();
 	void DrawHeroMiddleBody();
 	void damage(int amount);
@@ -19,7 +22,7 @@ public:
 	float giveHealth();
 	float giveShield();
 	float giveScore();
-	void updateScore(float scorePoint);
+	void  updateScore(float scorePoint);
 	float giveSpeed();
 	float giveTurretRotation();
 	float giveTurretRotationSpeed();
@@ -56,10 +59,12 @@ private:
 	bool atDestination;
 	float recoilStrength, recoilDistance, curRecoilForce;
 	float boostSpeed, boostPower;
-	int shieldStrength;
 	float shieldOpacity;
+	float shieldRadius;
 	bool isWalking=false;
 	float legRotation = 0.0f;
 	bool legRotationMaxReached = false;
+	bool shieldTriggered = false;
+	float shieldStrength;
 };
 

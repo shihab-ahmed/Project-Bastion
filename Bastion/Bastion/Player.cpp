@@ -37,9 +37,31 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->boostPower = 0.02f;
 	this->shieldStrength = 0;
 	this->shieldOpacity = 0.0f;
+	this->shieldRadius = this->width*2.5;
+	this->shieldTriggered = false;
 }
 
-
+void Player::setShieldTriggered(bool trigger)
+{
+	if (trigger)
+	{
+		this->shieldTriggered = true;
+		this->shieldStrength = 50;
+	}
+	else
+	{
+		this->shieldTriggered = false;
+		this->shieldStrength =  0;
+	}
+}
+int Player::giveShieldStrength()
+{
+	return shieldStrength;
+}
+void Player::shieldDamage()
+{
+	this->shield -= 1;
+}
 int Player::BeltRotation()
 {
 	this->Beltangle += 1.0f;
@@ -1937,7 +1959,21 @@ void Player::DrawPlayer()
 
 	glPopMatrix(); //hero Bottom pop
 
+	if (this->giveShield() > 0&&this->shieldTriggered)
+	{
+		this->shieldStrength -= 1;
+		glPushMatrix();
+		lighting->SetDiffuse(0, .7, 1, .3);
+		lighting->SetAmbient(0, .7, 1, .3);
+		lighting->SetEmmision(0, .7, 1, .3);
+		glutSolidSphere(this->shieldRadius,30,30);
+		lighting->LightReset();
+		glPopMatrix();
+	}
+
+
 	glPopMatrix();//whole body pop
+	
 
 	glPopMatrix();//Draw player control push matrix
 

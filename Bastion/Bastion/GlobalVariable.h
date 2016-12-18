@@ -5,6 +5,8 @@ bool keyDown[256];
 bool leftMouseDown = false;
 
 bool isFullscreen = true;
+float EnergyCollect = 5;
+float EnemyDestroyed = 10;
 float bulletSpeed = 0.5f;
 float bulletSpeedOriginal = 0.5f;
 int playerHealth = 10;
