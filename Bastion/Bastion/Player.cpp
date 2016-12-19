@@ -199,6 +199,7 @@ void DrawRightShoulder()
 	//right shoulder start
 	/*....................................................*/
 	glPushMatrix();
+	lighting->SetMetalWhite();
 	glTranslatef(-2, -1, 0);
 	glRotatef(180, 0, 1, 0);
 	//right shoulder armor start
@@ -219,6 +220,7 @@ void DrawRightShoulder()
 	glRotatef(-45, 0, 0, 1);
 	glScalef(.4, .2, 1);
 	glutSolidCube(1);
+	lighting->LightReset();
 	glPopMatrix();
 	/*............*/
 	//right shoulder armor end
@@ -226,6 +228,7 @@ void DrawRightShoulder()
 
 	glPushMatrix();//Lighting
 	//right shoulder armor clip 1 start
+	lighting->SetMetaBlack();
 	/*.........................*/
 	glPushMatrix();
 	glTranslatef(.1, .1, .2);
@@ -285,6 +288,7 @@ void DrawRightShoulder()
 	glPopMatrix();
 	/*.........................*/
 	//right shoulder armor clip 1 end
+	lighting->LightReset();
 	glPopMatrix();
 	/*....................................................*/
 	//right shoulder end
@@ -299,7 +303,7 @@ void drawHeroHead()
 
 	//Head outward start
 	glPushMatrix();//Light matrix push
-
+	lighting->SetMetalWhite();
 	/*............*/
 	glPushMatrix();
 	glScalef(1, 1, 2);
@@ -320,12 +324,16 @@ void drawHeroHead()
 	glPopMatrix();
 	/*............*/
 	//Head outward end
+	lighting->LightReset();
 	glPopMatrix(); //light matrix pop
 
 
-
+	
 	glPushMatrix();//Light matrix push
-
+	lighting->SetDiffuse(.6, .3, .1, 1);
+	lighting->SetAmbient(.6, .3, .1, 1);
+	lighting->SetEmmision(.3, .15, .05, 1);
+	lighting->SetShininess(100);
 	//Head inner start
 	/*...........................*/
 	glPushMatrix();
@@ -353,12 +361,12 @@ void drawHeroHead()
 	glPopMatrix();
 	/*...........................*/
 	//Head inner end
+	lighting->LightReset();
 	glPopMatrix(); //light matrix pop
 
 
 	glPushMatrix();
 
-	//SetEmision(0, .7, .7);
 	//Head core start
 	/*............*/
 	glPushMatrix();
@@ -384,6 +392,11 @@ void drawChest()
 
 
 	glPushMatrix(); //body ligting push
+	lighting->SetDiffuse(.65, .6, .6, 1);
+	lighting->SetAmbient(.65, .6, .6, 1);
+	lighting->SetEmmision(.32, .3, .3, 1);
+	lighting->SetSpecular(.32, .3, .3, 1);
+	lighting->SetShininess(100);
 	glPushMatrix();
 	glScalef(4, 3, 3);
 	//Chest Upper Part Start
@@ -562,6 +575,8 @@ void drawChest()
 	glutSolidCube(1);
 	glPopMatrix();
 	//Front armor lower end
+
+	lighting->LightReset();
 	glPopMatrix();//body lighting pop
 
 	glPushMatrix();
@@ -578,6 +593,11 @@ void drawChest()
 
 
 	glPushMatrix(); //body ligting push
+	lighting->SetDiffuse(.65, .6, .6, 1);
+	lighting->SetAmbient(.65, .6, .6, 1);
+	lighting->SetEmmision(.32, .3, .3, 1);
+	lighting->SetSpecular(.32, .3, .3, 1);
+	lighting->SetShininess(100);
 
 	//Shoulder clip 1 start
 	glPushMatrix();
@@ -622,6 +642,7 @@ void drawChest()
 	glutSolidCube(1);
 	glPopMatrix();
 	//Shoulder clip 5 part start
+	lighting->LightReset();
 	glPopMatrix();//Lighting end
 
 	glPopMatrix();//chest final pop

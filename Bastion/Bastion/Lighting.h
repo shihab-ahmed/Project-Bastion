@@ -12,6 +12,8 @@ public:
 	void SetEmmision(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void SetShininess(GLfloat rate);
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z, GLint lightNo);
+	void SetMetalWhite();
+	void SetMetaBlack();
 	~Lighting();
 private:
 	int Beltangle;

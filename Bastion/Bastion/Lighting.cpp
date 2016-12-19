@@ -68,6 +68,20 @@ void Lighting::SetPosition(GLfloat x, GLfloat y, GLfloat z,GLint lightNo)
 	if (lightNo == 1)glLightfv(GL_LIGHT1, GL_POSITION, position);
 	if (lightNo == 2)glLightfv(GL_LIGHT2, GL_POSITION, position);
 }
+void Lighting::SetMetalWhite()
+{
+	lighting->SetDiffuse(.7, .6, .6, 1);
+	lighting->SetAmbient(.7, .6, .6, 1);
+	//lighting->SetEmmision(.1, .07, .07, 1);
+	lighting->SetShininess(100);
+}
+void Lighting::SetMetaBlack()
+{
+	this->SetDiffuse(.4, .4, .4, 1);
+	this->SetAmbient(.4, .4, .4, 1);
+	this->SetEmmision(.1, .1, .1, 1);
+	this->SetShininess(100);
+}
 Lighting::~Lighting()
 {
 }

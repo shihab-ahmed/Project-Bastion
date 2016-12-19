@@ -23,7 +23,7 @@ EnemyTank::EnemyTank(float positionX, float positionZ, float initialRotation)
 	this->reloadTime = 50;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
-	this->sightRange = 15.0f;
+	this->sightRange = 20.0f;
 	this->sightCounter = 0;
 	this->isAimed = false;
 	this->destinX = positionX;
@@ -362,7 +362,8 @@ void EnemyTank::rotateTurret(float amount) {
 		this->turretRotation += 360;
 	}
 }
-void EnemyTank::turnTurretToward(float newAngle) {
+void EnemyTank::turnTurretToward(float newAngle)
+{
 	this->isAimed = false;
 	float curAngle = this->rotation + this->turretRotation;
 	if (curAngle > 180) {
@@ -427,7 +428,6 @@ void EnemyTank::runAI()
 			this->canSeePlayer = false;
 			this->destinX = this->lastSightingX;
 			this->destinZ = this->lastSightingZ;
-			//cout << "last seen:" << destinX <<" Last seen Y:"<<destinZ<< endl;
 		}
 	}
 	
@@ -484,10 +484,10 @@ void EnemyTank::rotate(bool directionIsPositive) {
 void EnemyTank::accelerate(bool directionIsForward) 
 {
 	if (directionIsForward) {
-		this->speed += 0.05;
+		this->speed += 0.06;
 	}
 	else {
-		this->speed -= 0.05;
+		this->speed -= 0.06;
 	}
 }
 void EnemyTank::turnToward(float newAngle) {

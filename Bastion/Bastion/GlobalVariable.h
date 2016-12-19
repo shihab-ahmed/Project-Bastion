@@ -25,7 +25,7 @@ int mapSize = 80;
 bool invincibility = false;
 int lastMouseX = 770;
 float lagDistance = 0;
-float fogColour[] = { 0.8f,0.8f,0.8f,0.0f };
+float fogColour[] = { 0.8f,0.8f,0.8f,1.0f };
 float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 
 PlazmaBall* plazmaBall;
