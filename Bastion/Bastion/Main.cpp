@@ -22,6 +22,8 @@ int main(int argc, char** argv)
 
 	addBuilding();
 	addEnemyTank();
+	addShieldGenerator();
+
 	//Set handler functions
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
@@ -77,13 +79,23 @@ void addEnemyTank()
 	enemyTanks.push_back(new EnemyTank( 50, 50, 90));
 	enemyTanks.push_back(new EnemyTank( 50,  0, 90));
 }
-
+void addShieldGenerator()
+{
+	shieldGenerators.push_back(new ShieldGenerator(-50, 0, 50, 0));
+	shieldGenerators.push_back(new ShieldGenerator(-50, 0,-50, 0));
+	shieldGenerators.push_back(new ShieldGenerator( 50, 0, 50, 0));
+	shieldGenerators.push_back(new ShieldGenerator( 50, 0,-50, 0));
+	shieldGenerators.push_back(new ShieldGenerator(  0, 0, 50, 0));
+	shieldGenerators.push_back(new ShieldGenerator(  0, 0,-50, 0));
+	shieldGenerators.push_back(new ShieldGenerator( 50, 0,  0, 0));
+	shieldGenerators.push_back(new ShieldGenerator(-50, 0,  0, 0));
+	shieldGenerators.push_back(new ShieldGenerator(  0, 0,  0, 0));
+}
 //Initializes 3D rendering
 void initRendering()
 {
 
-	//glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
-	glClearColor(0.8,.8,.8,0);
+	glClearColor(fogColour[0], fogColour[1], fogColour[2], fogColour[3]);
 	// set the fog attributes
 	glFogf(GL_FOG_START, 1.0f);
 	glFogf(GL_FOG_END, 200.0f);
@@ -92,11 +104,10 @@ void initRendering()
 	glFogf(GL_FOG_DENSITY, 0.06f);
 
 	// enable the fog
-	glEnable(GL_FOG);
+	//glEnable(GL_FOG);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);   //Enable lighting
 	glEnable(GL_LIGHT0);     //Enable light #0
 	glEnable(GL_LIGHT1);     //Enable light #1
@@ -210,7 +221,7 @@ void update(int value)
 void drawScene() 
 {
 
-	glFogfv(GL_FOG_COLOR, fogColour);
+	//glFogfv(GL_FOG_COLOR, fogColour);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -247,6 +258,10 @@ void drawScene()
 	for (int i = 0; i < collectables.size(); i++) 
 	{
 		collectables[i]->drawCollectable(collectables[i]->getType());
+	}
+	for (int i = 0; i < shieldGenerators.size(); i++)
+	{
+		shieldGenerators[i]->drawShield();
 	}
 	environment->groundFloor(mapSize);
 	environment->drawStreet();

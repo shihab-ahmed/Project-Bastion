@@ -28,6 +28,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlazmaBall.cpp" />
+    <ClCompile Include="ShieldGenerator.cpp" />
     <ClCompile Include="StatusUI.cpp" />
     <ClCompile Include="text3d.cpp" />
   </ItemGroup>
@@ -44,6 +45,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlazmaBall.h" />
+    <ClInclude Include="ShieldGenerator.h" />
     <ClInclude Include="StatusUI.h" />
     <ClInclude Include="text3d.h" />
   </ItemGroup>

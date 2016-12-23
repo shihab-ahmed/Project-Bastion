@@ -303,7 +303,7 @@ void drawHeroHead()
 
 	//Head outward start
 	glPushMatrix();//Light matrix push
-	lighting->SetMetalWhite();
+	lighting->SetMetalSilver();
 	/*............*/
 	glPushMatrix();
 	glScalef(1, 1, 2);
@@ -330,10 +330,7 @@ void drawHeroHead()
 
 	
 	glPushMatrix();//Light matrix push
-	lighting->SetDiffuse(.6, .3, .1, 1);
-	lighting->SetAmbient(.6, .3, .1, 1);
-	lighting->SetEmmision(.3, .15, .05, 1);
-	lighting->SetShininess(100);
+	lighting->SetMetaBlack();
 	//Head inner start
 	/*...........................*/
 	glPushMatrix();
@@ -370,11 +367,14 @@ void drawHeroHead()
 	//Head core start
 	/*............*/
 	glPushMatrix();
+	lighting->SetBlueEnergy();
 	glTranslatef(0, .1, .95);
 	glScalef(.3, .7, .3);
 	glutSolidCube(1);
+	lighting->LightReset();
 	/*............*/
 	glPopMatrix();
+
 	//Head core end
 	glPopMatrix();
 
@@ -392,11 +392,7 @@ void drawChest()
 
 
 	glPushMatrix(); //body ligting push
-	lighting->SetDiffuse(.65, .6, .6, 1);
-	lighting->SetAmbient(.65, .6, .6, 1);
-	lighting->SetEmmision(.32, .3, .3, 1);
-	lighting->SetSpecular(.32, .3, .3, 1);
-	lighting->SetShininess(100);
+	lighting->SetMetaBlack();
 	glPushMatrix();
 	glScalef(4, 3, 3);
 	//Chest Upper Part Start
@@ -593,11 +589,8 @@ void drawChest()
 
 
 	glPushMatrix(); //body ligting push
-	lighting->SetDiffuse(.65, .6, .6, 1);
-	lighting->SetAmbient(.65, .6, .6, 1);
-	lighting->SetEmmision(.32, .3, .3, 1);
-	lighting->SetSpecular(.32, .3, .3, 1);
-	lighting->SetShininess(100);
+	
+	lighting->SetMetalSilver();
 
 	//Shoulder clip 1 start
 	glPushMatrix();
@@ -659,6 +652,7 @@ void drawHeroLeftHand()
 	glRotatef(-90, 0, 1, 0);
 
 	glPushMatrix(); //final push for wrist
+	lighting->SetMetalSilver();
 	glTranslatef(1, 1, 0);
 	glRotatef(90, 0, 0, 1);
 
@@ -695,7 +689,7 @@ void drawHeroLeftHand()
 	glScalef(.15, .15, .15);
 	glutSolidTorus(1, 1, 6, 6);
 	glPopMatrix();
-
+	lighting->LightReset();
 	glPopMatrix();
 
 
@@ -703,9 +697,11 @@ void drawHeroLeftHand()
 	//cylinder
 	
 	glPushMatrix();
+	lighting->SetMetaBlack();
 	glTranslatef(-1, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	gluCylinder(gluNewQuadric(), .3, .3, 3, 20, 20);
+	lighting->LightReset();
 	glPopMatrix();
 
 	//wracking ball
@@ -856,6 +852,7 @@ void drawHandAndBodyAttacher()
 	quadratic = gluNewQuadric();
 
 	glPushMatrix();//hand body attacher final push
+	lighting->SetMetalSilver();
 	glRotatef(90, 0, 1, 0);
 	glPushMatrix();
 	glTranslatef(0, 0, -5);
@@ -867,6 +864,7 @@ void drawHandAndBodyAttacher()
 	glScalef(1, 1, 3);
 	glutSolidTorus(.5, 2, 3, 8);
 	glPopMatrix();
+	lighting->LightReset();
 	glPopMatrix(); //head body attacher final pop
 }
 
@@ -887,6 +885,7 @@ void DrawGun()
 
 	//main nosel circle  start
 	glPushMatrix();
+	lighting->SetMetalSilver();
 	glTranslatef(2, 0, 0);
 	glRotatef(90, 1, 0, 0);
 	glPushMatrix();
@@ -925,11 +924,13 @@ void DrawGun()
 	glScalef(.5, 1, 1);
 	glutSolidSphere(.2, 20, 20);
 	glPopMatrix();
+	lighting->LightReset();
 	glPopMatrix();
 	//circle for 2nd nosel end
 
 	//Upper part cube start
 	glPushMatrix();
+	lighting->SetMetaBlack();
 	glTranslatef(-.25, .3, 0);
 	glPushMatrix();
 	glScalef(1.5, .4, .3);
@@ -1031,6 +1032,7 @@ void DrawGun()
 	glutSolidCube(1);
 	glPopMatrix();
 	glPopMatrix();
+	lighting->LightReset();
 	//attach clip 7 cube end
 	glPopMatrix();//Light pop
 
@@ -1637,18 +1639,24 @@ void DrawLeftLeg()
 	glRotatef(20, 0, 0, 1.5);
 	glScalef(1, 2.2, 1.3);
 	glPushMatrix();
+	lighting->SetMetaBlack();
 	DrawLagPad();
+	lighting->LightReset();
 	glPopMatrix();
 	glPopMatrix();
 
+	lighting->SetMetalSilver();
 	DrawLeftLegSkeleton();
+	lighting->LightReset();
 
 	glPushMatrix();
 	glTranslatef(2, 1.4, 0);
 	glRotatef(90, 0, 0, 1);
 	glScalef(1, 2.7, 1.5);
 	glPushMatrix();
+	lighting->SetMetaBlack();
 	DrawLagPad();
+	lighting->LightReset();
 	glPopMatrix();
 	glPopMatrix();
 
@@ -1658,7 +1666,9 @@ void DrawLeftLeg()
 	glRotatef(90, 0, 0, 1);
 	glScalef(2, 2, 2);
 	glPushMatrix();
+	lighting->SetMetalSilver();
 	drawFoot();
+	lighting->LightReset();
 	glPopMatrix();
 	glPopMatrix();
 
@@ -1852,7 +1862,7 @@ bool Player::fire() {
 	if (this->reloadCounter <= 0) {
 		float angle = this->rotation + this->turretRotation;
 		plazmaBalls.push_back(new PlazmaBall(this->posX - 1.0*sin(angle * PI / 180),
-			0.65f,
+			0.5f,
 			this->posZ - 1.0*cos(angle * PI / 180), this->speedX, this->speedZ,
 			angle,1
 		));
@@ -1984,9 +1994,7 @@ void Player::DrawPlayer()
 	{
 		this->shieldStrength -= 1;
 		glPushMatrix();
-		lighting->SetDiffuse(0, .7, 1, .3);
-		lighting->SetAmbient(0, .7, 1, .3);
-		lighting->SetEmmision(0, .7, 1, .3);
+		lighting->SetBlueShield();
 		glutSolidSphere(this->shieldRadius,30,30);
 		lighting->LightReset();
 		glPopMatrix();

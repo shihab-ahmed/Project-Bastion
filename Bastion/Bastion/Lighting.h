@@ -14,6 +14,11 @@ public:
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z, GLint lightNo);
 	void SetMetalWhite();
 	void SetMetaBlack();
+	void SetMetalSilver();
+	void SetMetalGold();
+	void SetBlueEnergy();
+	void SetBlueShield();
+	void SetRedShield();
 	~Lighting();
 private:
 	int Beltangle;

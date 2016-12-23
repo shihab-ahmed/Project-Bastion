@@ -286,7 +286,7 @@ bool EnemyTank::canMoveTo(float newX, float newZ)
 		return false;
 	}
 
-	if (isClipped(newX + getMiddleBodyDistance(newX, this->width *2), newZ + getMiddleBodyDistance(newZ,this->depth)))
+	if (isClipped(newX , newZ ))
 	{
 		return false;
 	}

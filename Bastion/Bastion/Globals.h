@@ -8,6 +8,7 @@
 #include "Collectable.h"
 #include "text3d.h"
 #include "StatusUI.h"
+#include "ShieldGenerator.h"
 //extern bool keyDown[256];
 //extern bool leftMouseDown;
 //
@@ -40,10 +41,12 @@ extern PlazmaBall* plazmaBall;
 extern Player* playerRobot;
 extern Lighting* lighting;
 extern StatusUI* statusUI;
+
 extern std::vector<PlazmaBall*> plazmaBalls;
 extern std::vector<Collectable*> collectables;
 extern std::vector<Building*> buildings;
 extern std::vector<EnemyTank*> enemyTanks;
+extern std::vector<ShieldGenerator*> shieldGenerators;
 
 extern float fogColour[];
 extern float originalfogColour[];

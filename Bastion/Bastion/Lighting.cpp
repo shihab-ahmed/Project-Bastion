@@ -70,18 +70,51 @@ void Lighting::SetPosition(GLfloat x, GLfloat y, GLfloat z,GLint lightNo)
 }
 void Lighting::SetMetalWhite()
 {
-	lighting->SetDiffuse(.7, .6, .6, 1);
-	lighting->SetAmbient(.7, .6, .6, 1);
-	//lighting->SetEmmision(.1, .07, .07, 1);
+	lighting->SetDiffuse(1, 1,1, 1);
+	lighting->SetAmbient(1, 1, 1, 1);
 	lighting->SetShininess(100);
 }
 void Lighting::SetMetaBlack()
 {
-	this->SetDiffuse(.4, .4, .4, 1);
-	this->SetAmbient(.4, .4, .4, 1);
-	this->SetEmmision(.1, .1, .1, 1);
+	this->SetDiffuse(.22, .2, .2, 1);
+	this->SetAmbient(.22, .2, .2, 1);
+	this->SetSpecular(.22, .2, .2, 1);
 	this->SetShininess(100);
 }
+void Lighting::SetMetalSilver()
+{
+	this->SetDiffuse(.4, .42, .43, 1);
+	this->SetAmbient(.4, .42, .43, 1);
+	this ->SetSpecular(.2,.2,.2,1);
+	this->SetEmmision(.2, .21, .22, 1);
+	this->SetShininess(100);
+}
+void Lighting::SetMetalGold()
+{
+	this->SetDiffuse(.4, .4, .4, 1);
+	this->SetAmbient(.4, .4, .4, 1);
+	this->SetShininess(100);
+}
+void Lighting::SetBlueEnergy()
+{
+	this->SetDiffuse(.4, .4, .4, 1);
+	this->SetAmbient(.4, .4, .4, 1);
+	this->SetShininess(100);
+}
+void Lighting::SetBlueShield()
+{
+	lighting->SetDiffuse(0, .7, 1, .4);
+	lighting->SetAmbient(0, .7, 1, .4);
+	lighting->SetEmmision(0, .7, 1, .4);
+	lighting->SetShininess(100);
+}
+void Lighting::SetRedShield()
+{
+	lighting->SetDiffuse(1, .1, .1, .4);
+	lighting->SetAmbient(1, .1, .1, .4);
+	lighting->SetEmmision(1, .1, .1, .4);
+}
+
 Lighting::~Lighting()
 {
 }
