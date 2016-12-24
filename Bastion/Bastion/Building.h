@@ -8,6 +8,7 @@ public:
 	~Building();
 	void BuildingA();
 	void drawSelf();
+	void BuildingB();
 	float givePosX();
 	float givePosZ();
 	float giveHeight();

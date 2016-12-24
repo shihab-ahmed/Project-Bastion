@@ -14,7 +14,7 @@ PlazmaBall::PlazmaBall(float positionX, float positionY, float positionZ, float 
 	this->posY = positionY;
 	this->posZ = positionZ;
 	this->type = type;
-	this->remainingLife = 100;
+	this->remainingLife = 300;
 }
 
 void PlazmaBall::drawPlazmaBall(float type) 

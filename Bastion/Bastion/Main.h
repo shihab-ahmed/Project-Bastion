@@ -10,6 +10,7 @@
 #include "Collectable.h"
 #include "StatusUI.h"
 #include "ShieldGenerator.h"
+#include "GameStatus.h"
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void handlePassiveMouse(int x, int y);
@@ -27,6 +28,7 @@ void addEnemyTank();
 void cleanup();
 float computeScale(const char* strs[4]);
 void addShieldGenerator();
+void Display();
 #endif
 
 

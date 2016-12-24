@@ -24,6 +24,7 @@
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="EnemyTank.cpp" />
     <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="GameStatus.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="Definition.h" />
     <ClInclude Include="EnemyTank.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="GameStatus.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GlobalVariable.h" />
     <ClInclude Include="Lighting.h" />

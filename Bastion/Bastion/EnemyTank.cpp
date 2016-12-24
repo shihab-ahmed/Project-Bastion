@@ -20,7 +20,7 @@ EnemyTank::EnemyTank(float positionX, float positionZ, float initialRotation)
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
 	this->health = 5;
-	this->reloadTime = 50;
+	this->reloadTime = 30;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
 	this->sightRange = 20.0f;

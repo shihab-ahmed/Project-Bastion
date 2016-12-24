@@ -5,6 +5,7 @@ public:
 	ShieldGenerator(float positionX, float positionY, float positionZ, float initialRotation);
 	void drawShield();
 	~ShieldGenerator();
+	void Shield();
 private:
 	float posX, posY, posZ;
 	float type;

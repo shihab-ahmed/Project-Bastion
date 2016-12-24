@@ -16,10 +16,10 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->depth = 2;
 	this->turretRotation = 0.0f;
 	this->turretRotationSpeed = 0.0f;
-	this->health = 10;
+	this->health = 5;
 	this->score = 0;
-	this->shield = 5;
-	this->reloadTime = 30;
+	this->shield = 3;
+	this->reloadTime = 20;
 	this->reloadCounter = this->reloadTime;
 	this->canSeePlayer = false;
 	this->sightRange = 23.0f;
@@ -1743,10 +1743,10 @@ void Player::rotate(bool directionIsPositive)
 {
 	this->rotationSpeed *= 0.01f;
 	if (directionIsPositive) {
-		this->rotationSpeed += 3.5;
+		this->rotationSpeed += 3.8;
 	}
 	else {
-		this->rotationSpeed -= 3.5;
+		this->rotationSpeed -= 3.8;
 	}
 	if (this->boostSpeed > 0.02f) {
 		this->rotationSpeed /= (this->boostSpeed)*100.0f;

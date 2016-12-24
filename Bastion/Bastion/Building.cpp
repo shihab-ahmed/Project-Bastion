@@ -133,10 +133,112 @@ void Building::drawSelf()
 	glTranslatef(this->posX, this->height/2.3, this->posZ);
 	glScalef(width,height,depth);
 	glutWireCube(1);
-	this->BuildingA();
+	this->BuildingB();
 	glPopMatrix();
 }
+void Building::BuildingB() 
+{
+	Lighting *light;
+	light = new Lighting();
 
+	light->SetPosition(0, 5, 0, 1);//Which Light Activate
+	light->SetBuildingColorWhite();
+
+	GLUquadricObj *quadratic;
+	quadratic = gluNewQuadric();
+
+	glPushMatrix();
+	glutWireCube(1);
+	glPushMatrix();
+	glTranslatef(0, -.45, 0);
+	//Top Base Part
+	glPushMatrix();
+	glTranslatef(-.2, .52, -.2);
+	glScalef(.8, .9, .8);
+	glutSolidCube(.5);
+	glPopMatrix();
+	//Upper Part
+	glPushMatrix();
+	glPushMatrix();
+	glTranslatef(0, .58, .22);
+	glScalef(.8, 1.2, .8);
+	glutSolidCube(.5);
+	glPopMatrix();
+	//Pillar
+	glPushMatrix();
+	glTranslatef(.2, .29, .44);
+	glRotatef(90, -1, 0, 0);
+	glScalef(1, 1.1, 15);
+	glPushMatrix();
+	glScalef(.04, .04, .04);
+	gluCylinder(quadratic, .5, .5, 1, 25, 25);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(.2, .29, 0);
+	glRotatef(90, -1, 0, 0);
+	glScalef(1, 1.1, 15);
+	glPushMatrix();
+	glScalef(.04, .04, .04);
+	gluCylinder(quadratic, .5, .5, 1, 25, 25);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.2, .29, 0);
+	glRotatef(90, -1, 0, 0);
+	glScalef(1, 1.1, 15);
+	glPushMatrix();
+	glScalef(.04, .04, .04);
+	gluCylinder(quadratic, .5, .5, 1, 25, 25);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-.2, .29, .44);
+	glRotatef(90, -1, 0, 0);
+	glScalef(1, 1.1, 15);
+	glPushMatrix();
+	glScalef(.04, .04, .04);
+	gluCylinder(quadratic, .5, .5, 1, 25, 25);
+	glPopMatrix();
+	glPopMatrix();
+	glPopMatrix();
+	//Lower Part Adjacent
+	glPushMatrix();
+	glPushMatrix();
+	glTranslatef(.3, .15, 0);
+	glScalef(.2, .4, .2);
+	glutSolidCube(.5);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(.3, .15, .4);
+	glScalef(.2, .4, .2);
+	glutSolidCube(.5);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(.3, .15, -.4);
+	glScalef(.2, .4, .2);
+	glutSolidCube(.5);
+	glPopMatrix();
+	glPopMatrix();
+	glPushMatrix();
+	//Upper Base Part
+	glTranslatef(-.12, .17, 0);
+	glScalef(1.5, .5, 2);
+	glutSolidCube(.5);
+	glPopMatrix();
+	//Base Part
+	glPushMatrix();
+	glScalef(2, .2, 2);
+	glutSolidCube(.5);
+	glPopMatrix();
+	glPopMatrix();
+	glPopMatrix();
+
+	light->LightReset();
+}
 float Building::givePosX() {
 	return this->posX;
 }

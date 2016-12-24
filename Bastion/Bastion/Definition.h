@@ -5,6 +5,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <vector>
-#include <GL/glut.h>
+#include <gl/glut.h>
 #define PI 3.141592654
 #endif //DEFINITION_HEADER

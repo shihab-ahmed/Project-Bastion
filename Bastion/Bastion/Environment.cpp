@@ -68,8 +68,10 @@ void Environment::groundFloor(float size)
 {
 	glPushMatrix();
 	glTranslatef(0, -1.3, 0);
+	lighting->setGroundColor();
 	glScalef(size*2+4,.4, size*2+4);
 	glutSolidCube(1);
+	lighting->LightReset();
 	glPopMatrix();
 }
 Environment::~Environment()

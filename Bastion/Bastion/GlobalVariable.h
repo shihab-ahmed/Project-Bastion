@@ -25,14 +25,17 @@ int mapSize = 80;
 bool invincibility = false;
 int lastMouseX = 770;
 float lagDistance = 0;
-float fogColour[] = { 0.9f,0.9f,0.9f,1.0f };
+float fogColour[] = { 0.9f,0.92f,1.0f ,1};
 float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
+
+GLuint displayListID;
 
 PlazmaBall* plazmaBall;
 Player* playerRobot;
 Environment* environment;
 Lighting* lighting;
 StatusUI* statusUI;
+GameStatus* gameStatus;
 std::vector<PlazmaBall*> plazmaBalls;
 std::vector<Collectable*> collectables;
 std::vector<Building*> buildings;

@@ -9,39 +9,17 @@
 #include "text3d.h"
 #include "StatusUI.h"
 #include "ShieldGenerator.h"
-//extern bool keyDown[256];
-//extern bool leftMouseDown;
-//
-//extern bool isFullscreen;
+#include "GameStatus.h"
 extern float bulletSpeed;
 extern float bulletSpeedOriginal;
-//extern int playerHealth;
-//
-//extern float screenShakeMagnitude;
-//extern float zoomMagnitude;
-//extern int screenWidth, screenHeight;
-//extern int numTanks;
-//extern int numObstacles;
-//extern float radarVisionMagnitude;
-//extern bool radarVisionActivated;
-//extern bool invincibility;
-//
-//extern bool slowMotionActivated;
-//extern float slowMotionMagnitude;
-//extern int slowMotionCounter;
-//extern float slowMotionDuration;
-
 extern int mapSize;
-
-//extern int lastMouseX;
-//extern float lagDistance;
 
 extern Environment* environment;
 extern PlazmaBall* plazmaBall;
 extern Player* playerRobot;
 extern Lighting* lighting;
 extern StatusUI* statusUI;
-
+extern GameStatus* gameStatus;
 extern std::vector<PlazmaBall*> plazmaBalls;
 extern std::vector<Collectable*> collectables;
 extern std::vector<Building*> buildings;

@@ -15,14 +15,13 @@ int main(int argc, char** argv)
 	playerRobot = new Player(0,0,0);
 	environment = new Environment();
 	lighting    = new Lighting();
-	statusUI = new StatusUI();
-
+	statusUI    = new StatusUI();
+	gameStatus  = new GameStatus();
 
 	initRendering();
-
 	addBuilding();
 	addEnemyTank();
-	addShieldGenerator();
+	//addShieldGenerator();
 
 	//Set handler functions
 	glutDisplayFunc(drawScene);
@@ -91,6 +90,38 @@ void addShieldGenerator()
 	shieldGenerators.push_back(new ShieldGenerator(-50, 0,  0, 0));
 	shieldGenerators.push_back(new ShieldGenerator(  0, 0,  0, 0));
 }
+
+void Display()
+{
+	for (int i = 0; i < plazmaBalls.size(); i++)
+	{
+		if (plazmaBalls[i]->getType() == 1) plazmaBalls[i]->drawPlazmaBall(1);
+		else
+		{
+			plazmaBalls[i]->drawPlazmaBall(0);
+		}
+	}
+	for (int i = 0; i < buildings.size(); i++)
+	{
+		buildings[i]->drawSelf();
+	}
+	for (int i = 0; i < enemyTanks.size(); i++)
+	{
+		enemyTanks[i]->DrawTankType1();
+	}
+	for (int i = 0; i < collectables.size(); i++)
+	{
+		collectables[i]->drawCollectable(collectables[i]->getType());
+	}
+	for (int i = 0; i < shieldGenerators.size(); i++)
+	{
+		shieldGenerators[i]->drawShield();
+	}
+	environment->groundFloor(mapSize);
+	environment->drawStreet();
+	environment->drawStreetLamp();
+	
+}
 //Initializes 3D rendering
 void initRendering()
 {
@@ -101,13 +132,14 @@ void initRendering()
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.06f);
+	glFogf(GL_FOG_DENSITY, 0.02f);
 
 	// enable the fog
-	//glEnable(GL_FOG);
+	glEnable(GL_FOG);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);   //Enable lighting
 	glEnable(GL_LIGHT0);     //Enable light #0
 	glEnable(GL_LIGHT1);     //Enable light #1
@@ -119,100 +151,108 @@ void initRendering()
 		glutFullScreen();
 		glutWarpPointer(770, 450);
 	}
-	lighting->SetPosition(0,20,0,0);
+	lighting->SetPosition(0,20,2,0);
 	t3dInit();
+	
+	displayListID = glGenLists(1);
+	glNewList(displayListID, GL_COMPILE);
+	Display();
+	glEndList();
 }
 
 void update(int value)
 {
 	checkInput();
-	playerRobot->move();
-
-	if ((playerRobot->giveShieldStrength() <= 0.0) || (playerRobot->giveShield()<= 0))
+	if (!gameStatus->getIsGameOver())
 	{
-		playerRobot->setShieldTriggered(false);
-	}
+		playerRobot->move();
 
-	bool bulletNotDead = true;
-	for (int i = 0; i < plazmaBalls.size(); i++)
-	{
-		plazmaBalls[i]->move();
-		bulletNotDead = true;
-		for (int j = 0; j < enemyTanks.size() && bulletNotDead; j++) 
+		if ((playerRobot->giveShieldStrength() <= 0.0) || (playerRobot->giveShield() <= 0))
 		{
-		
-			if (enemyTanks[j]->isHitBy(plazmaBalls[i])&&(plazmaBalls[i]->getType()==1))
+			playerRobot->setShieldTriggered(false);
+		}
+
+		bool bulletNotDead = true;
+		for (int i = 0; i < plazmaBalls.size(); i++)
+		{
+			plazmaBalls[i]->move();
+			bulletNotDead = true;
+			for (int j = 0; j < enemyTanks.size() && bulletNotDead; j++)
 			{
-				enemyTanks[j]->damage(1);
+
+				if (enemyTanks[j]->isHitBy(plazmaBalls[i]) && (plazmaBalls[i]->getType() == 1))
+				{
+					enemyTanks[j]->damage(1);
+					plazmaBalls[i]->flagAsDead();
+					bulletNotDead = false;
+				}
+			}
+			if ((plazmaBalls[i]->getType() == 0) && playerRobot->isHitBy(plazmaBalls[i]))
+			{
+				if (playerRobot->giveShield() > 0)
+				{
+					playerRobot->shieldDamage();
+					playerRobot->setShieldTriggered(true);
+				}
+				else
+				{
+					playerRobot->damage(1);
+					if (playerRobot->giveHealth() <= 0)
+					{
+						gameStatus->setIsGameOver(true);
+						gameStatus->setIsPlayerWin(false);
+					}
+				}
 				plazmaBalls[i]->flagAsDead();
-				bulletNotDead = false;
-			}
-		}
-		if ((plazmaBalls[i]->getType()==0) && playerRobot->isHitBy(plazmaBalls[i])) 
-		{
-			if (playerRobot->giveShield() > 0)
-			{
-				playerRobot->shieldDamage();
-				playerRobot->setShieldTriggered(true);
-			}
-			else
-			{
-				playerRobot->damage(1);
-			}			
-			plazmaBalls[i]->flagAsDead();
-			
-		}
-	}
-	for (int i = 0; i < plazmaBalls.size(); i++)
-	{
-		if (plazmaBalls[i]->isDead())
-		{
-			delete plazmaBalls[i];
-			plazmaBalls.erase(plazmaBalls.begin() + i);
-		}
-	}
-	for (int i = 0; i < enemyTanks.size(); i++)
-	{
-		enemyTanks[i]->move();
-		enemyTanks[i]->runAI();
-	}
 
-	for (int i = 0; i < collectables.size(); i++)
-	{
-		if (collectables[i]->isHitBy(collectables[i]) && (collectables[i]->getType() == 1))
+			}
+		}
+		for (int i = 0; i < plazmaBalls.size(); i++)
 		{
-			collectables[i]->flagAsDead();
-			playerRobot->updateScore(EnergyCollect);
+			if (plazmaBalls[i]->isDead())
+			{
+				delete plazmaBalls[i];
+				plazmaBalls.erase(plazmaBalls.begin() + i);
+			}
+		}
+		for (int i = 0; i < enemyTanks.size(); i++)
+		{
+			enemyTanks[i]->move();
+			enemyTanks[i]->runAI();
+		}
+
+		for (int i = 0; i < collectables.size(); i++)
+		{
+			if (collectables[i]->isHitBy(collectables[i]) && (collectables[i]->getType() == 1))
+			{
+				collectables[i]->flagAsDead();
+				playerRobot->updateScore(EnergyCollect);
+			}
+		}
+		for (int i = 0; i < collectables.size(); i++)
+		{
+			if (collectables[i]->isDead())
+			{
+				delete collectables[i];
+				collectables.erase(collectables.begin() + i);
+			}
+		}
+
+		for (int i = 0; i < enemyTanks.size(); i++)
+		{
+			if (enemyTanks[i]->isDead())
+			{
+				collectables.push_back(new Collectable(enemyTanks[i]->givePosX(), 1, enemyTanks[i]->givePosZ(), 0, 1));
+				delete enemyTanks[i];
+				enemyTanks.erase(enemyTanks.begin() + i);
+				numTanks--;
+				playerRobot->updateScore(EnemyDestroyed);
+			}
 		}
 	}
-	for (int i = 0; i < collectables.size(); i++)
-	{
-		if (collectables[i]->isDead())
-		{
-			delete collectables[i];
-			collectables.erase(collectables.begin() + i);
-		}
-	}
-	
-	for (int i = 0; i < enemyTanks.size(); i++)
-	{
-		if (enemyTanks[i]->isDead())
-		{
-			collectables.push_back(new Collectable(enemyTanks[i]->givePosX(), 1, enemyTanks[i]->givePosZ(), 0, 1));
-			delete enemyTanks[i];
-			enemyTanks.erase(enemyTanks.begin() + i);
-			numTanks--;
-			playerRobot->updateScore(EnemyDestroyed);
-		}
-	}
-	/*fogColour[0] = (1.0f - radarVisionMagnitude)*originalfogColour[0];
-	fogColour[1] = (1.0f - radarVisionMagnitude)*originalfogColour[1];
-	fogColour[2] = (1.0f - radarVisionMagnitude)*originalfogColour[2];*/
 
 	lagDistance *= 0.95;
-	screenShakeMagnitude *= 0.95;
-	zoomMagnitude *= 0.95;
-
+	
 	glutPostRedisplay();
 	glutTimerFunc(25, update, 0);
 }
@@ -239,34 +279,8 @@ void drawScene()
 
 	glTranslatef(-playerRobot->givePosX(), 0.0f, -playerRobot->givePosZ());
 	//Camera end
-	for (int i = 0; i < plazmaBalls.size(); i++) 
-	{
-		if(plazmaBalls[i]->getType()==1) plazmaBalls[i]->drawPlazmaBall(1);
-		else
-		{
-			plazmaBalls[i]->drawPlazmaBall(0);
-		}
-	}
-	for (int i = 0; i < buildings.size(); i++) 
-	{
-		buildings[i]->drawSelf();
-	}
-	for (int i = 0; i < enemyTanks.size(); i++)
-	{
-		enemyTanks[i]->DrawTankType1();
-	}
-	for (int i = 0; i < collectables.size(); i++) 
-	{
-		collectables[i]->drawCollectable(collectables[i]->getType());
-	}
-	for (int i = 0; i < shieldGenerators.size(); i++)
-	{
-		shieldGenerators[i]->drawShield();
-	}
-	environment->groundFloor(mapSize);
-	environment->drawStreet();
-	environment->drawStreetLamp();
 	
+	Display();
 
 	//Creating line for gun range
 	glPushMatrix();
@@ -290,11 +304,15 @@ void drawScene()
 	//done line for gun range
 
 	environment->DrawEnvironment();	
-	glutWireCube(1);
+	//glutSolidTetrahedron();
 	playerRobot->DrawPlayer();	
 	glPopMatrix();
 
 	statusUI->drawPlayerStatus(playerRobot->giveHealth(),playerRobot->giveShield(),playerRobot->giveScore());
+	if (gameStatus->getIsGameOver())
+	{
+		statusUI->drawGameStatus();
+	}
 
 	glutSwapBuffers();
 }
@@ -327,23 +345,19 @@ void checkInput()
 	if (keyDown['w']) {
 		playerRobot->accelerate(true);
 		playerRobot->WalkingState(true);
-		//cout << "w" << endl;
 	}
 	if (keyDown['s']) {
 		playerRobot->accelerate(false);
 		playerRobot->WalkingState(true);
-		//cout << "s" << endl;
 	}
 	if (!keyDown['w']&& !keyDown['s']) {
 		playerRobot->WalkingState(false);
 	}
 	if (keyDown['a']) {
 		playerRobot->rotate(true);
-		//cout << "a" << endl;
 	}
 	if (keyDown['d']) {
 		playerRobot->rotate(false);
-		//cout << "d" << endl;
 	}
 	if (keyDown[' '] || leftMouseDown)
 	{
@@ -405,30 +419,3 @@ float computeScale(const char* strs[4])
 
 	return 2.6f / maxWidth;
 }
-
-////void createTank(float x, float y) {
-////	tanks.push_back(new Tank(x, y, 0.0f));
-////}
-////
-////void createObstacle(float x, float z, float r) {
-////	obstacles.push_back(new Obstacle(x, z, r));
-////}
-//
-////void drawHealthBars() 
-////{
-////	glPushMatrix();
-////	glTranslatef(0.0f, 1.1f, -3.0f);
-////	glColor4f(1.0f, 0.3f, 0.3f, 0.2f);
-////	glPushMatrix();
-////	glScalef(2 * playerTank->giveHealth(), 1.0f, 1.0f);
-////	glutSolidCube(0.1f);
-////	glPopMatrix();
-////
-////	glTranslatef(0.0f, -0.1f, 0.0f);
-////	glColor4f(0.2f, 0.2f, 1.0f, 0.3f);
-////	glPushMatrix();
-////	glScalef(2 * playerTank->giveShieldStrength(), 1.0f, 1.0f);
-////	glutSolidCube(0.1f);
-////	glPopMatrix();
-////	glPopMatrix();
-////}

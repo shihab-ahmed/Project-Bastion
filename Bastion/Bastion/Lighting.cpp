@@ -83,10 +83,10 @@ void Lighting::SetMetaBlack()
 }
 void Lighting::SetMetalSilver()
 {
-	this->SetDiffuse(.4, .42, .43, 1);
-	this->SetAmbient(.4, .42, .43, 1);
+	this->SetDiffuse(.6, .62, .63, 1);
+	this->SetAmbient(.6, .62, .63, 1);
 	this ->SetSpecular(.2,.2,.2,1);
-	this->SetEmmision(.2, .21, .22, 1);
+	this->SetEmmision(.4, .41, .43, 1);
 	this->SetShininess(100);
 }
 void Lighting::SetMetalGold()
@@ -114,7 +114,44 @@ void Lighting::SetRedShield()
 	lighting->SetAmbient(1, .1, .1, .4);
 	lighting->SetEmmision(1, .1, .1, .4);
 }
+void Lighting::SetBuildingColorWhite() {
 
+	this->SetDiffuse(0.9, 0.92, 0.95, 1); //Which color apply on full Body
+
+	this->SetAmbient(0.4, 0.5, 0.6, 1); //Which color of shadow
+
+	this->SetEmmision(.2,.21,.23,1);
+
+	this->SetShininess(100); //How much it will shine
+
+}
+void Lighting::SetShieldColor() {
+
+	this->SetDiffuse(0.10, 0.82, 1.00, 1); //Which color apply on full Body
+
+	this->SetAmbient(0.00, 0.28, 0.70, 1); //Which color of shadow
+
+	this->SetEmmision(0.40, 0.64, 1.00, 1); //If object emmit any light or not
+
+	this->SetShininess(100); //How much it will shine
+
+}
+void Lighting::setGroundColor()
+{
+	this->SetDiffuse(0.7, 0.72,0.75, 1); //Which color apply on full Body
+
+	this->SetAmbient(0.7, 0.72, 0.75, 1); //Which color of shadow
+	this->SetEmmision(0.3, 0.32, 0.33, 1);
+	this->SetShininess(100); //How much it will shine
+}
+void Lighting::setUITextColorYellow()
+{
+	this->SetDiffuse(1, 0.7, 0.0, 1); //Which color apply on full Body
+
+	this->SetAmbient(1, 0.7, 0.0, 1); //Which color of shadow
+	this->SetEmmision(0.3, 0.25, 0.0, 1);
+	this->SetShininess(100); //How much it will shine
+}
 Lighting::~Lighting()
 {
 }

@@ -19,6 +19,10 @@ public:
 	void SetBlueEnergy();
 	void SetBlueShield();
 	void SetRedShield();
+	void SetBuildingColorWhite();
+	void SetShieldColor();
+	void setGroundColor();
+	void setUITextColorYellow();
 	~Lighting();
 private:
 	int Beltangle;
