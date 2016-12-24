@@ -11,6 +11,7 @@
 #include "StatusUI.h"
 #include "ShieldGenerator.h"
 #include "GameStatus.h"
+#include "Animation.h"
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void handlePassiveMouse(int x, int y);

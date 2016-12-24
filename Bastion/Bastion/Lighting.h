@@ -18,6 +18,14 @@ public:
 	void SetMetalGold();
 	void SetBlueEnergy();
 	void SetBlueShield();
+	void setMirrorCollor();
+	void setPortalBlueColor();
+	void setRedLight();
+	void setBlueLight();
+	void setYellowLight();
+	void setMagentaLight();
+	void setGreenLeafLight();
+	void setBranchLight();
 	void SetRedShield();
 	void SetBuildingColorWhite();
 	void SetShieldColor();

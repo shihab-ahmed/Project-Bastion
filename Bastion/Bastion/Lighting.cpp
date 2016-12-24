@@ -108,6 +108,27 @@ void Lighting::SetBlueShield()
 	lighting->SetEmmision(0, .7, 1, .4);
 	lighting->SetShininess(100);
 }
+void Lighting::setMirrorCollor()
+{
+	lighting->SetDiffuse(0.7, .7, .7, .1);
+	lighting->SetAmbient(0.7, .7, .7, .1);
+	lighting->SetEmmision(0.7, .7, .7, .1);
+	lighting->SetShininess(100);
+}
+void Lighting::setPortalBlueColor()
+{
+	this->SetDiffuse(0.10, 0.82, 1.00, .5);
+	this->SetAmbient(0.00, 0.28, 0.70, .5);
+	this->SetEmmision(0.40, 0.64, 1.00, .5);
+	this->SetShininess(100); 
+}
+//void Lighting::SetBlueSea()
+//{
+//	lighting->SetDiffuse(0, .7, 1, .4);
+//	lighting->SetAmbient(0, .7, 1, .4);
+//	lighting->SetEmmision(0, .7, 1, .4);
+//	lighting->SetShininess(100);
+//}
 void Lighting::SetRedShield()
 {
 	lighting->SetDiffuse(1, .1, .1, .4);
@@ -151,6 +172,46 @@ void Lighting::setUITextColorYellow()
 	this->SetAmbient(1, 0.7, 0.0, 1); //Which color of shadow
 	this->SetEmmision(0.3, 0.25, 0.0, 1);
 	this->SetShininess(100); //How much it will shine
+}
+void Lighting::setRedLight()
+{
+	this->SetDiffuse(1,0.1,0.1,1);
+	this->SetAmbient(1, 0.1, 0.1, 1);
+	this->SetEmmision(1, 0.1, 0.1, 1);
+	this->SetShininess(100);
+}
+void Lighting::setBlueLight()
+{
+	this->SetDiffuse(0, 0, 1, 1);
+	this->SetAmbient(0, 0, 1, 1);
+	this->SetEmmision(0, 0, 1, 1);
+	this->SetShininess(100);
+}
+void Lighting::setYellowLight()
+{
+	this->SetDiffuse(1, 1, 0.1, 1);
+	this->SetAmbient(1, 1, 0.1, 1);
+	this->SetEmmision(1, 1, 0.1, 1);
+	this->SetShininess(100);
+}
+void Lighting::setMagentaLight()
+{
+	this->SetDiffuse(1, 0.1, 1, 1);
+	this->SetAmbient(1, 0.1, 1, 1);
+	this->SetEmmision(1, 0.1, 1, 1);
+	this->SetShininess(100);
+}
+void Lighting::setGreenLeafLight()
+{
+	this->SetDiffuse(0.2, .7, .2, 1);
+	this->SetAmbient(0.2, .6, .2, 1);
+	this->SetShininess(100);
+}
+void Lighting::setBranchLight()
+{
+	this->SetDiffuse(0.6, .3, .3, 1);
+	this->SetAmbient(0.6, .3, .3, 1);
+	this->SetShininess(100);
 }
 Lighting::~Lighting()
 {

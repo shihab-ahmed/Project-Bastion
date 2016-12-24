@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="text3d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="CollisionDetection.h" />

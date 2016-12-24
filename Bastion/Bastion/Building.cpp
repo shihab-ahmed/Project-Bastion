@@ -3,13 +3,15 @@
 
 
 
-Building::Building(float positionX, float positionZ, float height,float Width,float Depth)
+Building::Building(float positionX, float positionZ, float height,float Width,float Depth,float rotation,float type)
 {
 	this->posX = positionX;
 	this->posZ = positionZ;
 	this->height = height;
 	this->width = Width;
 	this->depth= Depth;
+	this->rotation = rotation;
+	this->type = type;
 }
 
 
@@ -127,13 +129,18 @@ void Building::BuildingA()
 	glPopMatrix();//Final pop matrix
 
 }
-void Building::drawSelf() 
+float Building::getType()
+{
+	return this->type;
+}
+void Building::drawSelf(float type) 
 {
 	glPushMatrix();
 	glTranslatef(this->posX, this->height/2.3, this->posZ);
+	glRotatef(rotation,0,1,0);
 	glScalef(width,height,depth);
-	glutWireCube(1);
-	this->BuildingB();
+	if(type==1)this->BuildingA();
+	if(type == 2)this->BuildingB();
 	glPopMatrix();
 }
 void Building::BuildingB() 

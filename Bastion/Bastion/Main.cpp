@@ -12,15 +12,16 @@ int main(int argc, char** argv)
 
 	//Create the window
 	glutCreateWindow("Tanks!");	
-	playerRobot = new Player(0,0,0);
+	playerRobot = new Player(0,playerGamePosZ,0);
 	environment = new Environment();
 	lighting    = new Lighting();
 	statusUI    = new StatusUI();
 	gameStatus  = new GameStatus();
+	animation	= new Animation();
 
 	initRendering();
 	addBuilding();
-	addEnemyTank();
+	//addEnemyTank();
 	//addShieldGenerator();
 
 	//Set handler functions
@@ -48,25 +49,25 @@ int main(int argc, char** argv)
 }
 void addBuilding()
 {
-	buildings.push_back(new Building(float(-70), float(-70), 20, 20, 20));
-	buildings.push_back(new Building(float( 70), float(-70), 20, 20, 20));
-	buildings.push_back(new Building(float(-70), float( 70), 20, 20, 20));
-	buildings.push_back(new Building(float( 70), float( 70), 20, 20, 20));
+	buildings.push_back(new Building(float(-70), float(-70), 20, 20, 20 ,90, 1));
+	buildings.push_back(new Building(float( 70), float(-70), 20, 20, 20 , 0 ,2));
+	buildings.push_back(new Building(float(-70), float( 70), 20, 20, 20, 0, 1));
+	buildings.push_back(new Building(float( 70), float( 70), 20, 20, 20,90,2));
 
-	buildings.push_back(new Building(float(-26), float(-26), 20, 30, 30));
-	buildings.push_back(new Building(float( 26), float(-26), 20, 30, 30));
-	buildings.push_back(new Building(float(-26), float( 26), 20, 30, 30));
-	buildings.push_back(new Building(float( 26), float( 26), 20, 30, 30));
+	buildings.push_back(new Building(float(-26), float(-26), 20, 30, 30,90,2));
+	//buildings.push_back(new Building(float( 26), float(-26), 20, 30, 30));
+	buildings.push_back(new Building(float(-26), float( 26), 20, 30, 30,90,1));
+	buildings.push_back(new Building(float( 26), float( 26), 20, 30, 30,180,2));
 
-	buildings.push_back(new Building(float(-26), float( 70), 20, 30, 20));
-	buildings.push_back(new Building(float( 26), float( 70), 20, 30, 20));
-	buildings.push_back(new Building(float(-26), float(-70), 20, 30, 20));
-	buildings.push_back(new Building(float( 26), float(-70), 20, 30, 20));
+	buildings.push_back(new Building(float(-26), float( 70), 20, 30, 20,180,2));
+	buildings.push_back(new Building(float( 26), float( 70), 20, 30, 20,0,1));
+	buildings.push_back(new Building(float(-26), float(-70), 20, 30, 20,0,2));
+	buildings.push_back(new Building(float( 26), float(-70), 20, 30, 20,0,1));
 
-	buildings.push_back(new Building(float(-70), float( 26), 20, 20, 30));
-	buildings.push_back(new Building(float(-70), float(-26), 20, 20, 30));
-	buildings.push_back(new Building(float( 70), float( 26), 20, 20, 30));
-	buildings.push_back(new Building(float( 70), float(-26), 20, 20, 30));
+	buildings.push_back(new Building(float(-70), float( 26), 20, 20, 30,90,1));
+	buildings.push_back(new Building(float(-70), float(-26), 20, 20, 30,90,2));
+	buildings.push_back(new Building(float( 70), float( 26), 20, 20, 30,180,2));
+	buildings.push_back(new Building(float( 70), float(-26), 20, 20, 30,0,1));
 	
 }
 void addEnemyTank()
@@ -103,7 +104,7 @@ void Display()
 	}
 	for (int i = 0; i < buildings.size(); i++)
 	{
-		buildings[i]->drawSelf();
+		buildings[i]->drawSelf(buildings[i]->getType());
 	}
 	for (int i = 0; i < enemyTanks.size(); i++)
 	{
@@ -120,7 +121,10 @@ void Display()
 	environment->groundFloor(mapSize);
 	environment->drawStreet();
 	environment->drawStreetLamp();
-	
+	environment->Blocades();
+	environment->Park(26,-2.5,-26,30,30,30);
+	environment->PortalArea(0,110,0);
+	//environment->Sea(worldSize);
 }
 //Initializes 3D rendering
 void initRendering()
@@ -152,6 +156,7 @@ void initRendering()
 		glutWarpPointer(770, 450);
 	}
 	lighting->SetPosition(0,20,2,0);
+	gameStatus->setIsOpeningAnimation(false);
 	t3dInit();
 	
 	displayListID = glGenLists(1);
@@ -162,7 +167,10 @@ void initRendering()
 
 void update(int value)
 {
-	checkInput();
+	if (!gameStatus->getAnimation())
+	{
+		checkInput();
+	}
 	if (!gameStatus->getIsGameOver())
 	{
 		playerRobot->move();
@@ -270,16 +278,22 @@ void drawScene()
 	
 	glPushMatrix();
 
-	//Camera start
-	glTranslatef(0.0f, -1.5f, -7.0f);
-	glRotatef(5, 1.0f, 0.0f, 0.0f);
-	glRotatef(-playerRobot->giveRotation(), 0.0f, 1.0f, 0.0f);
-	glRotatef(lagDistance, 0.0f, 1.0f, 0.0f);
-	glRotatef(-playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
-
-	glTranslatef(-playerRobot->givePosX(), 0.0f, -playerRobot->givePosZ());
-	//Camera end
-	
+	if (!gameStatus->getAnimation())
+	{
+		//Camera start
+		glTranslatef(0.0f, -1.5f, -7.0f);
+		glRotatef(5, 1.0f, 0.0f, 0.0f);
+		glRotatef(-playerRobot->giveRotation(), 0.0f, 1.0f, 0.0f);
+		glRotatef(lagDistance, 0.0f, 1.0f, 0.0f);
+		glRotatef(-playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
+		glTranslatef(-playerRobot->givePosX(), 0.0f, -playerRobot->givePosZ());
+		//Camera end
+	}
+	else
+	{
+		if (gameStatus->getIsOpeningAnimation()) animation->Opening();
+		
+	}
 	Display();
 
 	//Creating line for gun range
@@ -297,7 +311,7 @@ void drawScene()
 		glTranslatef(0.0f, 0.0f, -seperation*i);
 		glRotatef(-playerRobot->giveRotation() - playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
 		glTranslatef(-playerRobot->giveSpeedX()*bulletTravel, 0.0f, -playerRobot->giveSpeedZ()*bulletTravel);
-		glutSolidSphere(0.05f, 10, 10);
+		if(!gameStatus->getAnimation())glutSolidSphere(0.05f, 10, 10);
 		glPopMatrix();
 	}
 	glPopMatrix();
@@ -318,22 +332,27 @@ void drawScene()
 }
 
 
-void handlePassiveMouse(int x, int y) {
-	playerRobot->rotateTurret(0.1*(lastMouseX - x));
-	lagDistance += 0.1*(lastMouseX - x);
-	lastMouseX = x;
-	if (x <= 2 || x >= 1355) {
-		glutWarpPointer(770, 450);
-		if (leftMouseDown) {
-			playerFire(GLUT_LEFT_BUTTON, GLUT_DOWN, 0, 0);
-			//cout << "Left mouse";
+void handlePassiveMouse(int x, int y)
+{
+	if (!gameStatus->getAnimation())
+	{
+		playerRobot->rotateTurret(0.1*(lastMouseX - x));
+		lagDistance += 0.1*(lastMouseX - x);
+		lastMouseX = x;
+		if (x <= 2 || x >= 1355) {
+			glutWarpPointer(770, 450);
+			if (leftMouseDown) {
+				playerFire(GLUT_LEFT_BUTTON, GLUT_DOWN, 0, 0);
+				//cout << "Left mouse";
+			}
+			lastMouseX = 770;
 		}
-		lastMouseX = 770;
 	}
 }
 
-void handleActiveMouse(int x, int y) {
-	handlePassiveMouse(x, y);
+void handleActiveMouse(int x, int y)
+{
+	if (!gameStatus->getAnimation())handlePassiveMouse(x, y);
 }
 
 void checkInput() 
@@ -372,6 +391,11 @@ void checkInput()
 //Called when a key is pressed
 void handleKeypress(unsigned char key, int x, int y) {    //The current mouse coordinates
 	keyDown[key] = true;
+	if (keyDown[27])
+	{
+		cleanup();
+		exit(0);
+	}
 }
 
 void handleKeyUp(unsigned char key, int x, int y) {

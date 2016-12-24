@@ -1685,6 +1685,14 @@ bool Player::isHitBy(PlazmaBall* theBullet)
 	float z = theBullet->givePosZ() - this->givePosZ();
 	return x*x + z*z < (this->width * 1)*(this->width * 1);
 }
+void Player::setPosX(float x)
+{
+	this->posX = x;
+}
+void Player::setPosZ(float z)
+{
+	this->posZ = z;
+}
 float Player::playerLegRotation()
 {
 	
@@ -1693,7 +1701,12 @@ float Player::playerLegRotation()
 		//cout << "walkng" << endl;
 		if (this->legRotationMaxReached)
 		{
-			this->legRotation -= 1.5f;
+			if (gameStatus->getAnimation())this->legRotation -= 1.0f;
+			else
+			{
+				this->legRotation -= 1.5f;
+			}
+			
 			if (this->legRotation <- 15)
 			{
 				this->legRotationMaxReached = false;
@@ -1701,7 +1714,12 @@ float Player::playerLegRotation()
 		}
 		else
 		{
-			this->legRotation += 1.5f;
+			if (gameStatus->getAnimation())this->legRotation += 1.0f;
+			else
+			{
+				this->legRotation += 1.5f;
+			}
+			
 			if (this->legRotation >15)
 			{
 				this->legRotationMaxReached = true;
@@ -1724,12 +1742,24 @@ void Player::WalkingState(bool isWalk)
 void Player::accelerate(bool directionIsForward)
 {
 	
-	if (directionIsForward) {
-		this->speed += 0.04;
+	if (directionIsForward)
+	{
+		if(gameStatus->getAnimation())this->speed += 0.01;
+		else
+		{
+			this->speed += 0.04;
+		}
+		
 		
 	}
-	else {
-		this->speed -= 0.04;
+	else
+	{
+		if (gameStatus->getAnimation())this->speed -= 0.01;
+		else
+		{
+			this->speed -= 0.04;
+		}
+		
 	}
 }
 float Player::givePosX() {
@@ -1858,8 +1888,10 @@ void Player::rotateTurret(float amount)
 		this->turretRotation += 360;
 	}
 }
-bool Player::fire() {
-	if (this->reloadCounter <= 0) {
+bool Player::fire()
+{
+	if (this->reloadCounter <= 0) 
+	{
 		float angle = this->rotation + this->turretRotation;
 		plazmaBalls.push_back(new PlazmaBall(this->posX - 1.0*sin(angle * PI / 180),
 			0.5f,
@@ -1874,14 +1906,16 @@ bool Player::fire() {
 }
 bool Player::canMoveTo(float newX, float newZ)
 {
-	
-	if (newX > mapSize - 1.0f || newX < -mapSize + 1.0f || newZ > mapSize - 1.0f || newZ < -mapSize + 1.0f) {
-	
-		return false;
-	}
-	if (isClipped(newX+this->speedX, newZ+this->speedZ))
+	if (!gameStatus->getAnimation())
 	{
-		return false;
+		if (newX > mapSize - 1.0f || newX < -mapSize + 1.0f || newZ > mapSize - 1.0f || newZ < -mapSize + 1.0f) {
+
+			return false;
+		}
+		if (isClipped(newX + this->speedX, newZ + this->speedZ))
+		{
+			return false;
+		}
 	}
 	return true;
 }

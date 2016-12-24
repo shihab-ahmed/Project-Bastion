@@ -12,6 +12,8 @@ public:
 	void DrawHeroMiddleBody();
 	void damage(int amount);
 	bool isHitBy(PlazmaBall * theBullet);
+	void setPosX(float x);
+	void setPosZ(float z);
 	float playerLegRotation();
 	void WalkingState(bool isWalk);
 	void accelerate(bool directionIsForward);

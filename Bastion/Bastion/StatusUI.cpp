@@ -4,6 +4,8 @@ using namespace std;
 
 StatusUI::StatusUI()
 {
+	this->remainLife = 300;
+	this->isDead = false;
 }
 
 void StatusUI::drawPlayerStatus(int health,int shield, int score)
@@ -82,6 +84,56 @@ void StatusUI::drawGameStatus()
 	glPopMatrix();
 	lighting->LightReset();
 	glPopMatrix();
+}
+void StatusUI::drawGameObjective()
+{
+	remainLife--;
+
+	glPushMatrix();
+	lighting->setUITextColorYellow();
+	glPushMatrix();
+	glTranslatef(0, 1, -7.0f);
+	glScalef(.25, .25, .25);
+	t3dDraw3D("Objective:", 0, 0, 0.2f);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, .5, -7.0f);
+	glScalef(.25, .25, .25);
+	t3dDraw3D("1.Destroy all Shield Genarator.", 0, 0, 0.2f);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -7.0f);
+	glScalef(.25, .25, .25);
+	t3dDraw3D("2.Destroy all tanks.", 0, 0, 0.2f);
+	glPopMatrix();
+	lighting->LightReset();
+	glPopMatrix();
+}
+void StatusUI::drawWelomce()
+{
+	remainLife--;
+	if (remainLife <= 0)flagAsDead(true);
+	glPushMatrix();
+	lighting->SetShieldColor();
+	glPushMatrix();
+	glTranslatef(0, 1, -7.0f);
+	glScalef(.5, .5, .5);
+	t3dDraw3D("Project Bastion", 0, 0, 0.2f);
+	glPopMatrix();
+
+	lighting->LightReset();
+	glPopMatrix();
+}
+void StatusUI::flagAsDead(bool state)
+{
+	this->isDead = state;
+}
+bool StatusUI::getIsDead()
+{
+	return this->isDead;
+	remainLife = 300;
 }
 StatusUI::~StatusUI()
 {
