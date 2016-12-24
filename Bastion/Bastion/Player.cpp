@@ -100,7 +100,7 @@ void DrawLeftShoulder()
 	//Left shoulder armor start
 
 	glPushMatrix();// light start
-
+	lighting->SetMetalSilver();
 	/*................*/
 	glPushMatrix();
 	glScalef(.2, 1, 1);
@@ -119,13 +119,14 @@ void DrawLeftShoulder()
 	glScalef(.4, .2, 1);
 	glutSolidCube(1);
 	glPopMatrix();
-
+	lighting->LightReset();
 	glPopMatrix();//Light end
 				  /*.................*/
 				  //Left shoulder armor end
 
 	glPushMatrix();//clip light
 	//Left shoulder armor clip 1 start
+	lighting->SetMetaBlack();
 	/*............................*/
 	glPushMatrix();
 	glTranslatef(.1, .1, .2);
@@ -183,7 +184,7 @@ void DrawLeftShoulder()
 	//Left shoulder armor clip 1 end
 	/*............................*/
 	glPopMatrix();//clip light end
-
+	lighting->LightReset();
 	glPopMatrix();
 	/*...............................................*/
 	//left shoulder end
@@ -199,7 +200,7 @@ void DrawRightShoulder()
 	//right shoulder start
 	/*....................................................*/
 	glPushMatrix();
-	lighting->SetMetalWhite();
+	lighting->SetMetalSilver();
 	glTranslatef(-2, -1, 0);
 	glRotatef(180, 0, 1, 0);
 	//right shoulder armor start
@@ -701,7 +702,6 @@ void drawHeroLeftHand()
 	glTranslatef(-1, 0, 0);
 	glRotatef(90, 0, 1, 0);
 	gluCylinder(gluNewQuadric(), .3, .3, 3, 20, 20);
-	lighting->LightReset();
 	glPopMatrix();
 
 	//wracking ball
@@ -719,7 +719,7 @@ void drawHeroLeftHand()
 	glScalef(1.5, 1.5, 1.5);
 
 	//Middle part
-
+	lighting->SetMetaBlack();
 	glPushMatrix();
 	glScalef(1, 1, .4);
 	glutSolidCube(1);
@@ -746,11 +746,12 @@ void drawHeroLeftHand()
 	glScalef(.4, .4, .4);
 	glutSolidCube(1);
 	glPopMatrix();
+	lighting->LightReset();
 	//middle part end
 
 
 	//side part 1
-
+	lighting->SetMetalSilver();
 	glPushMatrix();
 	glTranslatef(0, 0, -.29);
 	glScalef(1.1, 1.1, .5);
@@ -819,7 +820,7 @@ void drawHeroLeftHand()
 	glScalef(.4, .4, .4);
 	glutSolidCube(1);
 	glPopMatrix();
-
+	lighting->LightReset();
 	glPopMatrix();
 	//side part 2 end
 
@@ -1058,7 +1059,7 @@ void RightHandAttacher()
 	glScalef(1.5, 1.5, 1.5);
 
 	//Middle part
-	
+	lighting->SetMetaBlack();
 	glPushMatrix();
 	glScalef(1, 1, .4);
 	glutSolidCube(1);
@@ -1085,12 +1086,13 @@ void RightHandAttacher()
 	glScalef(.4, .4, .4);
 	glutSolidCube(1);
 	glPopMatrix();
+	lighting->LightReset();
 	//middle part end
 
 
 	glPushMatrix();//Light push
 	//side part 1
-	
+	lighting->SetMetalSilver();
 	glPushMatrix();
 	glTranslatef(0, 0, -.29);
 	glScalef(1.1, 1.1, .5);
@@ -1162,6 +1164,7 @@ void RightHandAttacher()
 
 	glPopMatrix();
 	glPopMatrix();
+	lighting->LightReset();
 	//side part 2 end
 
 	//cylinder
@@ -1281,7 +1284,9 @@ void Player::DrawHeroMiddleBody()
 	glPushMatrix();
 	glTranslatef(0, -.3, 0);
 	glRotatef(-90, 1, 0, 0);
+	lighting->SetMetaBlack();
 	gluCylinder(gluNewQuadric(), .5, .5, 1, 20, 20);
+	lighting->LightReset();
 	glPopMatrix();
 
 	glPushMatrix();
@@ -1290,11 +1295,14 @@ void Player::DrawHeroMiddleBody()
 	glRotatef(this->BeltRotation(),0,0,1);
 	glPushMatrix();
 	glScalef(.35, .35, .6);
+	lighting->SetMetalSilver();
 	glutSolidTorus(.5, 1.5, 20, 20);
+	lighting->LightReset();
 	glPopMatrix();
 
 
 	glPushMatrix();
+	lighting->SetMetaBlack();
 	glScalef(.2, 1.5, .2);
 	glutSolidCube(1);
 	glPopMatrix();
@@ -1316,13 +1324,15 @@ void Player::DrawHeroMiddleBody()
 	glScalef(.2, 1.5, .2);
 	glutSolidCube(1);
 	glPopMatrix();
-
+	lighting->LightReset();
 	glPopMatrix();
 
 	glPushMatrix();
+	lighting->SetMetalSilver();
 	glTranslatef(0, -.65, 0);
 	glScalef(1.2, .8, 1.8);
 	glutSolidCube(1);
+	lighting->LightReset();
 	glPopMatrix();
 
 	glPopMatrix();//middle body final pop
@@ -1971,9 +1981,10 @@ void Player::DrawPlayer()
 	glPushMatrix();//Right hand and body attacher push
 	glTranslatef(-1.8, 2.3, -.2);
 	glRotatef(180, 0, 1, 0);
-	//glRotatef(LeftHandRotation, 1, 0, 0);
 	glScalef(.15, .15, .15);
+	lighting->SetMetalSilver();
 	drawHandAndBodyAttacher();
+	lighting->LightReset();
 	glPopMatrix();//Right hand and body attacher push
 
 	glPushMatrix();//Left hand and body attacher push
@@ -1986,7 +1997,9 @@ void Player::DrawPlayer()
 	glTranslatef(1.8, 2.3, -.2);
 	//glRotatef(LeftHandRotation, 1, 0, 0);
 	glScalef(.15, .15, .15);
+	lighting->SetMetalSilver();
 	drawHandAndBodyAttacher();
+	lighting->LightReset();
 	glPopMatrix();//Left hand and body attacher push
 
 	glPushMatrix();//Right Hand

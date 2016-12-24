@@ -24,16 +24,16 @@ void Building::BuildingA()
 	glTranslatef(0, .05, 0);
 	glScalef(.5,.2,.5);
 	glPushMatrix();
-	//SetLightEnable();
-	//SetDiffuse(0, .8, 1);
-	//SetAmbient(0, .8, 1);
-	//SetEmision(0, .4, .8);
+
 	glScalef(1, 4, 1);
+	lighting->SetShieldColor();
 	glutSolidCube(1);
+	lighting->LightReset();
 	//SetLightDisbale();
 	glPopMatrix();
 
 	glPushMatrix();
+	lighting->SetBuildingColorWhite();
 	glPushMatrix();
 	glTranslatef(0, 2, 0);
 	glScalef(1.2, .5, 1.2);
@@ -122,6 +122,7 @@ void Building::BuildingA()
 	glScalef(.1, 1, .2);
 	glutSolidCube(1);
 	glPopMatrix();
+	lighting->LightReset();
 	glPopMatrix();
 
 	glPopMatrix(); //light pop
@@ -155,7 +156,6 @@ void Building::BuildingB()
 	quadratic = gluNewQuadric();
 
 	glPushMatrix();
-	glutWireCube(1);
 	glPushMatrix();
 	glTranslatef(0, -.45, 0);
 	//Top Base Part
@@ -178,6 +178,8 @@ void Building::BuildingB()
 	glScalef(1, 1.1, 15);
 	glPushMatrix();
 	glScalef(.04, .04, .04);
+	lighting->LightReset();
+	lighting->SetMetaBlack();
 	gluCylinder(quadratic, .5, .5, 1, 25, 25);
 	glPopMatrix();
 	glPopMatrix();
@@ -230,6 +232,8 @@ void Building::BuildingB()
 	glutSolidCube(.5);
 	glPopMatrix();
 	glPopMatrix();
+	lighting->LightReset();
+	lighting->SetBuildingColorWhite();
 	glPushMatrix();
 	//Upper Base Part
 	glTranslatef(-.12, .17, 0);

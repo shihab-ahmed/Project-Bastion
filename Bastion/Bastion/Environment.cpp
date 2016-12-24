@@ -27,41 +27,11 @@ void Environment::drawStreet()
 	for (int i = 0; i < buildings.size(); i++)
 	{
 		glPushMatrix();
+		lighting->setGroundColor();
 		glTranslatef(buildings[i]->givePosX(),-1.3,buildings[i]->givePosZ());
 		glScalef(buildings[i]->giveWidth()+4,1,buildings[i]->giveDepth()+4);
 		glutSolidCube(1);
-		glPopMatrix();
-	}
-}
-void Environment::drawStreetLamp()
-{
-	for (int i = 0; i < buildings.size(); i++)
-	{
-		float posx = buildings[i]->givePosX() + buildings[i]->giveWidth() / 2;
-		float posz = buildings[i]->givePosZ() + buildings[i]->giveDepth() / 2;
-
-		glPushMatrix();
-		glTranslatef(posx, 0,posz );
-		glScalef(1, 4, 1);
-		glutSolidCube(1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(posx, 0,-posz);
-		glScalef(1, 4, 1);
-		glutSolidCube(1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(-posx, 0, posz);
-		glScalef(1, 4, 1);
-		glutSolidCube(1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(-posx, 0, -posz);
-		glScalef(1, 4, 1);
-		glutSolidCube(1);
+		lighting->LightReset();
 		glPopMatrix();
 	}
 }
@@ -701,7 +671,7 @@ void Environment::Sea(float size)
 	glPushMatrix();
 	glTranslatef(0, -1.6, 0);
 	lighting->SetBlueShield();
-	glScalef(size * 4 + 4, .4, size * 4 + 4);
+	glScalef(size * 4 + 4, .1, size * 4 + 4);
 	glutSolidCube(1);
 	lighting->LightReset();
 	glPopMatrix();

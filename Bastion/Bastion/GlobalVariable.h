@@ -4,7 +4,7 @@
 bool keyDown[256];
 bool leftMouseDown = false;
 
-bool isFullscreen = false;
+bool isFullscreen = true;
 float EnergyCollect = 5;
 float EnemyDestroyed = 10;
 float bulletSpeed = 0.5f;
@@ -32,7 +32,7 @@ float originalfogColour[] = { 0.1f,0.6f,0.9f,0.0f };
 float playerOpeningPosX = 0;
 float playerOpeningPosZ = 135;
 float playerGamePosX = 0;
-float playerGamePosZ = 0;
+float playerGamePosZ = 70;
 float playerWinPosX = 0;
 float playerWinPosZ = 0;
 

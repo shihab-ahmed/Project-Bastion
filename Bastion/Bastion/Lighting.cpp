@@ -103,9 +103,9 @@ void Lighting::SetBlueEnergy()
 }
 void Lighting::SetBlueShield()
 {
-	lighting->SetDiffuse(0, .7, 1, .4);
-	lighting->SetAmbient(0, .7, 1, .4);
-	lighting->SetEmmision(0, .7, 1, .4);
+	lighting->SetDiffuse(0, .7, 1, .5);
+	lighting->SetAmbient(0, .7, 1, .5);
+	lighting->SetEmmision(0, .7, 1, .5);
 	lighting->SetShininess(100);
 }
 void Lighting::setMirrorCollor()
@@ -209,8 +209,8 @@ void Lighting::setGreenLeafLight()
 }
 void Lighting::setBranchLight()
 {
-	this->SetDiffuse(0.6, .3, .3, 1);
-	this->SetAmbient(0.6, .3, .3, 1);
+	this->SetDiffuse(0.8, .3, .3, 1);
+	this->SetAmbient(0.8, .3, .3, 1);
 	this->SetShininess(100);
 }
 Lighting::~Lighting()

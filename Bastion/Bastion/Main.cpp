@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
 	//Create the window
 	glutCreateWindow("Tanks!");	
-	playerRobot = new Player(0,playerGamePosZ,0);
+	playerRobot = new Player(0,playerOpeningPosZ,0);
 	environment = new Environment();
 	lighting    = new Lighting();
 	statusUI    = new StatusUI();
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
 	initRendering();
 	addBuilding();
-	//addEnemyTank();
+	addEnemyTank();
 	//addShieldGenerator();
 
 	//Set handler functions
@@ -50,22 +50,22 @@ int main(int argc, char** argv)
 void addBuilding()
 {
 	buildings.push_back(new Building(float(-70), float(-70), 20, 20, 20 ,90, 1));
-	buildings.push_back(new Building(float( 70), float(-70), 20, 20, 20 , 0 ,2));
+	buildings.push_back(new Building(float( 70), float(-70), 20, 20, 20 ,180 ,2));
 	buildings.push_back(new Building(float(-70), float( 70), 20, 20, 20, 0, 1));
 	buildings.push_back(new Building(float( 70), float( 70), 20, 20, 20,90,2));
 
-	buildings.push_back(new Building(float(-26), float(-26), 20, 30, 30,90,2));
+	buildings.push_back(new Building(float(-26), float(-26), 20, 30, 30,0,2));
 	//buildings.push_back(new Building(float( 26), float(-26), 20, 30, 30));
-	buildings.push_back(new Building(float(-26), float( 26), 20, 30, 30,90,1));
-	buildings.push_back(new Building(float( 26), float( 26), 20, 30, 30,180,2));
+	buildings.push_back(new Building(float(-26), float( 26), 20, 30, 30,0,1));
+	buildings.push_back(new Building(float( 26), float( 26), 20, 30, 30,0,2));
 
-	buildings.push_back(new Building(float(-26), float( 70), 20, 30, 20,180,2));
+	buildings.push_back(new Building(float(-26), float( 70), 20, 30, 20,0,2));
 	buildings.push_back(new Building(float( 26), float( 70), 20, 30, 20,0,1));
 	buildings.push_back(new Building(float(-26), float(-70), 20, 30, 20,0,2));
 	buildings.push_back(new Building(float( 26), float(-70), 20, 30, 20,0,1));
 
-	buildings.push_back(new Building(float(-70), float( 26), 20, 20, 30,90,1));
-	buildings.push_back(new Building(float(-70), float(-26), 20, 20, 30,90,2));
+	buildings.push_back(new Building(float(-70), float( 26), 20, 20, 30,0,1));
+	buildings.push_back(new Building(float(-70), float(-26), 20, 20, 30,0,2));
 	buildings.push_back(new Building(float( 70), float( 26), 20, 20, 30,180,2));
 	buildings.push_back(new Building(float( 70), float(-26), 20, 20, 30,0,1));
 	
@@ -120,11 +120,10 @@ void Display()
 	}
 	environment->groundFloor(mapSize);
 	environment->drawStreet();
-	environment->drawStreetLamp();
 	environment->Blocades();
 	environment->Park(26,-2.5,-26,30,30,30);
 	environment->PortalArea(0,110,0);
-	//environment->Sea(worldSize);
+	environment->Sea(worldSize);
 }
 //Initializes 3D rendering
 void initRendering()
@@ -136,7 +135,7 @@ void initRendering()
 	glFogf(GL_FOG_END, 200.0f);
 	glFogfv(GL_FOG_COLOR, fogColour);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.02f);
+	glFogf(GL_FOG_DENSITY, 0.03f);
 
 	// enable the fog
 	glEnable(GL_FOG);
@@ -156,7 +155,7 @@ void initRendering()
 		glutWarpPointer(770, 450);
 	}
 	lighting->SetPosition(0,20,2,0);
-	gameStatus->setIsOpeningAnimation(false);
+	gameStatus->setIsOpeningAnimation(true);
 	t3dInit();
 	
 	displayListID = glGenLists(1);
@@ -300,7 +299,6 @@ void drawScene()
 	glPushMatrix();
 	glTranslatef(playerRobot->givePosX(), 1.0f, playerRobot->givePosZ());
 	glRotatef(playerRobot->giveRotation() + playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
-	//glColor4f(0.1f, 0.7f, 1.0f, 0.2f);
 
 	float seperation = 2.0f;
 
@@ -311,7 +309,9 @@ void drawScene()
 		glTranslatef(0.0f, 0.0f, -seperation*i);
 		glRotatef(-playerRobot->giveRotation() - playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
 		glTranslatef(-playerRobot->giveSpeedX()*bulletTravel, 0.0f, -playerRobot->giveSpeedZ()*bulletTravel);
+		lighting->SetMetalSilver();
 		if(!gameStatus->getAnimation())glutSolidSphere(0.05f, 10, 10);
+		lighting->LightReset();
 		glPopMatrix();
 	}
 	glPopMatrix();

@@ -86,6 +86,7 @@ void Animation::Opening()
 			this->camX = 0;
 			this->camY = 0;
 			this->camZ = -118;
+			playerRobot->setPosZ(playerGamePosZ);
 		}
 	}
 	glTranslatef(0.0f,0, 0.0f);
