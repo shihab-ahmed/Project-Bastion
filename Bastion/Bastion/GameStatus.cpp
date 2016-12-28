@@ -69,7 +69,7 @@ bool GameStatus::getIsLostAnimation()
 }
 bool GameStatus::getIsWinAnimation()
 {
-	return this->isPlayerWin;
+	return this->isWinAnimation;
 }
 GameStatus::~GameStatus()
 {

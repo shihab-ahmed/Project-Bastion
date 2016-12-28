@@ -74,6 +74,12 @@ void Lighting::SetMetalWhite()
 	lighting->SetAmbient(1, 1, 1, 1);
 	lighting->SetShininess(100);
 }
+void Lighting::setMetalOrange()
+{
+	lighting->SetDiffuse(1, .6, .1, 1);
+	lighting->SetAmbient(1, .6, .1, 1);
+	lighting->SetShininess(100);
+}
 void Lighting::SetMetaBlack()
 {
 	this->SetDiffuse(.22, .2, .2, 1);

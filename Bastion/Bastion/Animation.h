@@ -7,6 +7,8 @@ public:
 	void angleYUpdate(float val);
 	void camYUpdate();
 	void Opening();
+	float givePosY();
+	void Win();
 	~Animation();
 private:
 	float angleX;
@@ -15,6 +17,7 @@ private:
 	float camX;
 	float camY;
 	float camZ;
+	float posY;
 	float playerReachedOpeningCamera;
 	bool  openingState1;
 	bool  openingState2;
@@ -23,5 +26,13 @@ private:
 	bool  openingState5;
 	bool  openingState6;
 	bool  openingState7;
+
+	bool  winState1;
+	bool  winState2;
+	bool  winState3;
+	bool  winState4;
+	bool  winState5;
+	bool  winState6;
+	bool  winState7;
 };
 

@@ -13,6 +13,7 @@ public:
 	void damage(int amount);
 	bool isHitBy(PlazmaBall * theBullet);
 	void setPosX(float x);
+	void setPosY(float x);
 	void setPosZ(float z);
 	float playerLegRotation();
 	void WalkingState(bool isWalk);
@@ -39,13 +40,14 @@ public:
 	bool fire();
 	bool canMoveTo(float newX, float newZ);
 	void DrawPlayer();
+	void setIsWinPortal(bool b);
 	~Player();
 private:
 	int Beltangle;
 	float speed;
 	int score;
 	int shield;
-	float posX, posZ;
+	float posX, posZ , posY;
 	float speedX, speedZ;
 	float rotation, rotationSpeed;
 	float width, height, depth;
@@ -67,6 +69,7 @@ private:
 	float legRotation = 0.0f;
 	bool legRotationMaxReached = false;
 	bool shieldTriggered = false;
+	bool winPortal = false;
 	float shieldStrength;
 };
 

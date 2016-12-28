@@ -7,6 +7,7 @@ Animation::Animation()
 	this->angleX = 0;
 	this->angleY = 0;
 	this->angleZ = 0;
+	this->posY = 0;
 	this->camX = 0;
 	this->camY = 0;
 	this->camZ = -118;
@@ -18,6 +19,14 @@ Animation::Animation()
 	this->openingState5 = false;
 	this->openingState6 = false;
 	this->openingState7 = false;
+
+	this->winState1 = true;
+	this->winState2 = false;
+	this->winState3 = false;
+	this->winState4 = false;
+	this->winState5 = false;
+	this->winState6 = false;
+	this->winState7 = false;
 }
 void Animation::angleXUpdate(float val)
 {
@@ -55,6 +64,7 @@ void Animation::Opening()
 		{
 			openingState2 = false;
 			openingState3 = true;
+			
 		}
 		else
 		{
@@ -96,6 +106,53 @@ void Animation::Opening()
 
 	playerRobot->accelerate(true);
 	playerRobot->WalkingState(true);
+}
+float Animation::givePosY()
+{
+	return this->posY;
+}
+void Animation::Win()
+{
+	if (winState1)
+	{
+		if (statusUI->getIsDead())
+		{
+			winState1 = false;
+			winState2 = true;
+			
+		}
+		else
+		{
+			cout << "Drawing" << endl;
+			statusUI->drawWin();
+		}
+	}
+	if (winState2)
+	{
+		statusUI->drawWin();
+
+		if (posY > 8)
+		{
+			winState2 = false;
+		}
+		else
+		{
+			posY += .05f;
+			playerRobot->setIsWinPortal(true);
+			playerRobot->setPosY(posY);
+		}
+		
+	}
+	
+
+	//Camera start
+	glTranslatef(0.0f, -1.5f, -7.0f);
+	glRotatef(5, 1.0f, 0.0f, 0.0f);
+	glRotatef(-playerRobot->giveRotation(), 0.0f, 1.0f, 0.0f);
+	glRotatef(lagDistance, 0.0f, 1.0f, 0.0f);
+	glRotatef(-playerRobot->giveTurretRotation(), 0.0f, 1.0f, 0.0f);
+	glTranslatef(-playerRobot->givePosX(), 0.0f, -playerRobot->givePosZ());
+	//Camera end
 }
 Animation::~Animation()
 {

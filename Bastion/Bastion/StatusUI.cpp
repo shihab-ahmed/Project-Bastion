@@ -5,6 +5,7 @@ using namespace std;
 StatusUI::StatusUI()
 {
 	this->remainLife = 300;
+	this->remainLifeForWin = 300;
 	this->isDead = false;
 }
 
@@ -126,6 +127,21 @@ void StatusUI::drawWelomce()
 	lighting->LightReset();
 	glPopMatrix();
 }
+void StatusUI::drawWin()
+{
+	remainLifeForWin--;
+	if (remainLifeForWin <= 0)flagAsDead(true);
+	glPushMatrix();
+	lighting->SetShieldColor();
+	glPushMatrix();
+	glTranslatef(3, 1, -7.0f);
+	glScalef(.5, .5, .5);
+	t3dDraw3D("You win", 0, 0, 0.2f);
+	glPopMatrix();
+
+	lighting->LightReset();
+	glPopMatrix();
+}
 void StatusUI::flagAsDead(bool state)
 {
 	this->isDead = state;
@@ -134,6 +150,7 @@ bool StatusUI::getIsDead()
 {
 	return this->isDead;
 	remainLife = 300;
+	this->isDead = false;
 }
 StatusUI::~StatusUI()
 {

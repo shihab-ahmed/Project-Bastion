@@ -22,7 +22,6 @@ int main(int argc, char** argv)
 	initRendering();
 	addBuilding();
 	addEnemyTank();
-	//addShieldGenerator();
 
 	//Set handler functions
 	glutDisplayFunc(drawScene);
@@ -79,18 +78,6 @@ void addEnemyTank()
 	enemyTanks.push_back(new EnemyTank( 50, 50, 90));
 	enemyTanks.push_back(new EnemyTank( 50,  0, 90));
 }
-void addShieldGenerator()
-{
-	shieldGenerators.push_back(new ShieldGenerator(-50, 0, 50, 0));
-	shieldGenerators.push_back(new ShieldGenerator(-50, 0,-50, 0));
-	shieldGenerators.push_back(new ShieldGenerator( 50, 0, 50, 0));
-	shieldGenerators.push_back(new ShieldGenerator( 50, 0,-50, 0));
-	shieldGenerators.push_back(new ShieldGenerator(  0, 0, 50, 0));
-	shieldGenerators.push_back(new ShieldGenerator(  0, 0,-50, 0));
-	shieldGenerators.push_back(new ShieldGenerator( 50, 0,  0, 0));
-	shieldGenerators.push_back(new ShieldGenerator(-50, 0,  0, 0));
-	shieldGenerators.push_back(new ShieldGenerator(  0, 0,  0, 0));
-}
 
 void Display()
 {
@@ -106,9 +93,12 @@ void Display()
 	{
 		buildings[i]->drawSelf(buildings[i]->getType());
 	}
-	for (int i = 0; i < enemyTanks.size(); i++)
+	if (!gameStatus->getAnimation())
 	{
-		enemyTanks[i]->DrawTankType1();
+		for (int i = 0; i < enemyTanks.size(); i++)
+		{
+			enemyTanks[i]->DrawTankType1();
+		}
 	}
 	for (int i = 0; i < collectables.size(); i++)
 	{
@@ -123,7 +113,7 @@ void Display()
 	environment->Blocades();
 	environment->Park(26,-2.5,-26,30,30,30);
 	environment->PortalArea(0,110,0);
-	environment->Sea(worldSize);
+	//environment->Sea(worldSize);
 }
 //Initializes 3D rendering
 void initRendering()
@@ -166,11 +156,13 @@ void initRendering()
 
 void update(int value)
 {
-	if (!gameStatus->getAnimation())
+	if (enemyTanks.size() <= 0)gameStatus->setIsWinAnimation(true);
+	if (!gameStatus->getAnimation()&&!gameStatus->getIsGameOver())
 	{
 		checkInput();
 	}
-	if (!gameStatus->getIsGameOver())
+	
+	if (!gameStatus->getIsGameOver() || !gameStatus->getAnimation())
 	{
 		playerRobot->move();
 
@@ -208,6 +200,7 @@ void update(int value)
 					{
 						gameStatus->setIsGameOver(true);
 						gameStatus->setIsPlayerWin(false);
+				
 					}
 				}
 				plazmaBalls[i]->flagAsDead();
@@ -291,7 +284,12 @@ void drawScene()
 	else
 	{
 		if (gameStatus->getIsOpeningAnimation()) animation->Opening();
-		
+		if (gameStatus->getIsWinAnimation()) animation->Win();
+		if (animation->givePosY() > 6)
+		{
+			cleanup();
+			exit(0);
+		}
 	}
 	Display();
 

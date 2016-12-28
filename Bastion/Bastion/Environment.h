@@ -5,7 +5,7 @@ public:
 	Environment();
 	void makeGrid(float size);
 	void drawStreet();
-	void drawStreetLamp();
+	void snowMan();
 	void tree();
 	void Block(float posX, float posZ, float Rotation);
 	float SolarAnimationUpdate();

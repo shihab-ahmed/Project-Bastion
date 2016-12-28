@@ -13,6 +13,7 @@ public:
 	void SetShininess(GLfloat rate);
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z, GLint lightNo);
 	void SetMetalWhite();
+	void setMetalOrange();
 	void SetMetaBlack();
 	void SetMetalSilver();
 	void SetMetalGold();

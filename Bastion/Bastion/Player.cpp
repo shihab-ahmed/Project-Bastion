@@ -9,6 +9,7 @@ Player::Player(float positionX, float positionZ, float initialRotation)
 	this->speed = 0.0f;
 	this->posX = positionX;
 	this->posZ = positionZ;
+	this->posY = 0;
 	this->rotation = initialRotation;
 	this->rotationSpeed = 0.0f;
 	this->width = 2;
@@ -1699,6 +1700,10 @@ void Player::setPosX(float x)
 {
 	this->posX = x;
 }
+void Player::setPosY(float y)
+{
+	this->posY = y;
+}
 void Player::setPosZ(float z)
 {
 	this->posZ = z;
@@ -1933,7 +1938,7 @@ void Player::DrawPlayer()
 {
 	glPushMatrix(); //Draw player control push matrix
 
-	glTranslatef(this->posX, 0.0f, this->posZ);
+	glTranslatef(this->posX, this->posY, this->posZ);
 	glRotatef(this->rotation, 0.0f, 1.0f, 0.0f);
 	glScalef(width,height,depth);
 
@@ -2047,12 +2052,27 @@ void Player::DrawPlayer()
 		glPopMatrix();
 	}
 
+	if (this->winPortal)
+	{
+		glPushMatrix();
+		glTranslatef(0,-20,0);
+		glRotatef(-90, 1, 0, 0);
+		lighting->SetBlueShield();
+		gluCylinder(gluNewQuadric(), 3, 3, 60, 20, 20);
+		lighting->LightReset();
+		glPopMatrix();
+	}
+
 
 	glPopMatrix();//whole body pop
 	
 
 	glPopMatrix();//Draw player control push matrix
 
+}
+void Player::setIsWinPortal(bool b)
+{
+	this->winPortal = b;
 }
 Player::~Player()
 {

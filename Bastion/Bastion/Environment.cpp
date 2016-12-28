@@ -35,6 +35,51 @@ void Environment::drawStreet()
 		glPopMatrix();
 	}
 }
+void Environment::snowMan() {
+	glPushMatrix();
+	
+	glPushMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -.25, 0);
+	glScalef(1.4, 1.4, 1.4);
+	//glutSolidSphere(.2, 25, 25);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, .1, 0);
+	glScalef(1.1, .9, 1.1);
+	lighting->SetMetalSilver();
+	glutSolidSphere(.2, 25, 25);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, .35, 0);
+	glPushMatrix();
+	glScalef(.7, .7, .7);
+	glutSolidSphere(.2, 25, 25);
+	lighting->LightReset();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0, 0, .06);
+	lighting->setMetalOrange();
+	glutSolidCone(.05, .2, 25, 25);
+	lighting->LightReset();
+	glPopMatrix();
+	glPushMatrix();
+	glScalef(.1, .1, .1);
+	glTranslatef(.6, .6, 1);
+	lighting->SetMetaBlack();
+	glutSolidSphere(.2, 25, 25);
+	glPopMatrix();
+	glPushMatrix();
+	glScalef(.1, .1, .1);
+	glTranslatef(-.6, .6, 1);
+	glutSolidSphere(.2, 25, 25);
+	lighting->LightReset();
+	glPopMatrix();
+	glPopMatrix();
+	glPopMatrix();
+	glPopMatrix();
+}
 void Environment::tree() {
 	GLUquadricObj *quadratic;
 	quadratic = gluNewQuadric();
@@ -505,6 +550,20 @@ void Environment::Park(float x, float y,float z,float h, float w,float d)
 	glTranslatef(0, .35, 0);
 	glScalef(.5, .5,.5);
 	globe();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1, .3, 1);
+	glRotated(45,0,1,0);
+	glScalef(.5, .5, .5);
+	snowMan();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.2, .3, 1);
+	glRotated(0, 0, 1, 0);
+	glScalef(.5, .5, .5);
+	snowMan();
 	glPopMatrix();
 
 	glPushMatrix();

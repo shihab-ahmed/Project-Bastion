@@ -34,7 +34,7 @@ float playerOpeningPosZ = 135;
 float playerGamePosX = 0;
 float playerGamePosZ = 70;
 float playerWinPosX = 0;
-float playerWinPosZ = 0;
+float playerWinPosZ = 70;
 
 GLuint displayListID;
 
